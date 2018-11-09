@@ -1,0 +1,124 @@
+{
+	"assignments":[
+		{
+		"id": 4,
+		"documentId": 4,
+		"categoryId": 525
+		},
+		{
+		"id": -1,
+		"documentId": 4,
+		"categoryId": 510
+		},
+		{
+		"id": -1,
+		"documentId": 4,
+		"categoryId": 256
+		},
+		{
+		"id": -1,
+		"documentId": 4,
+		"categoryId": 665
+		},
+		{
+		"id": -1,
+		"documentId": 4,
+		"categoryId": 2
+		},
+		{
+		"id": -1,
+		"documentId": 4,
+		"categoryId": 557
+		},
+		{
+		"id": -1,
+		"documentId": 4,
+		"categoryId": 0
+		},
+		{
+		"id": -1,
+		"documentId": 4,
+		"categoryId": 4
+		},
+		{
+		"id": 3,
+		"documentId": 3,
+		"categoryId": 450
+		},
+		{
+		"id": -1,
+		"documentId": 3,
+		"categoryId": 465
+		},
+		{
+		"id": -1,
+		"documentId": 3,
+		"categoryId": 382
+		},
+		{
+		"id": -1,
+		"documentId": 3,
+		"categoryId": 466
+		},
+		{
+		"id": -1,
+		"documentId": 3,
+		"categoryId": 256
+		},
+		{
+		"id": -1,
+		"documentId": 3,
+		"categoryId": 2
+		},
+		{
+		"id": -1,
+		"documentId": 3,
+		"categoryId": 0
+		},
+		{
+		"id": 2,
+		"documentId": 2,
+		"categoryId": 2
+		},
+		{
+		"id": -1,
+		"documentId": 2,
+		"categoryId": 0
+		},
+		{
+		"id": 1,
+		"documentId": 1,
+		"categoryId": 510
+		},
+		{
+		"id": -1,
+		"documentId": 1,
+		"categoryId": 665
+		},
+		{
+		"id": -1,
+		"documentId": 1,
+		"categoryId": 557
+		},
+		{
+		"id": -1,
+		"documentId": 1,
+		"categoryId": 4
+		},
+		{
+		"id": -1,
+		"documentId": 1,
+		"categoryId": 0
+		},
+		{
+		"id": 0,
+		"documentId": 0,
+		"categoryId": 4
+		},
+		{
+		"id": -1,
+		"documentId": 0,
+		"categoryId": 0
+		}
+	]
+}

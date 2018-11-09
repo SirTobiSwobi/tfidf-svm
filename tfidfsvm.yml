@@ -1,0 +1,67 @@
+name: C3 classifier trainer API
+calls: ['DELETE  /categories ',
+'GET     /categories ',
+'POST    /categories ',
+'DELETE  /categories/{cat} ',
+'GET     /categories/{cat} ',
+'PUT     /categories/{cat} ',
+'DELETE  /categorizations ',
+'GET     /categorizations ',
+'POST    /categorizations ',
+'GET     /categorizations/categories/{catId} ',
+'GET     /categorizations/documents/{docId} ',
+'POST    /categorizations/existing/{docId}',
+'DELETE  /configurations ',
+'GET     /configurations ',
+'POST    /configurations ',
+'DELETE  /configurations/{conf} ',
+'GET     /configurations/{conf} ',
+'PUT     /configurations/{conf} ',
+'DELETE  /documents ',
+'GET     /documents',
+'POST    /documents',
+'DELETE  /documents/{doc}',
+'GET     /documents/{doc}',
+'PUT     /documents/{doc}',
+'GET     /evaluations',
+'GET     /evaluations/{ts}',
+'GET     /metadata',
+'GET     /model/',
+'POST    /model/',
+'PUT     /model/',
+'DELETE  /models',
+'GET     /models',
+'POST    /models',
+'DELETE  /models/{mod}',
+'GET     /models/{mod}',
+'DELETE  /relationships',
+'GET     /relationships ',
+'POST    /relationships',
+'GET     /relationships/ancestors/{ofId}',
+'GET     /relationships/from/{fromId}',
+'GET     /relationships/to/{toId}',
+'DELETE  /relationships/{rel}',
+'GET     /relationships/{rel}',
+'PUT     /relationships/{rel}',
+'GET     /retraining',
+'DELETE  /targetfunction',
+'GET     /targetfunction',
+'POST    /targetfunction',
+'GET     /targetfunction/categories/{catId}',
+'GET     /targetfunction/documents/{docId}',
+'DELETE  /targetfunction/{ass}']
+algorithm: No actual algorithm implemented. This is an implementation of the abstract API
+phases: 1 to 3
+outputFormat: Document to category likelihoods 
+configuration: Will be the concatenation of other actual config parameters.
+configOptions: Depend on the algorithm. This includes all hyperparameters of the service.
+archetype: Classifier Trainer
+runType:  trainer
+debugExamples: false
+featureExtractionThreads: 4
+#Jersey client settings
+jerseyClient:
+  #The maximum idle time for a connection
+  timeout: 512 ms
+  #Work queue size for each client thread. Additional threads only spawn if the queue exceeds this.
+  workQueueSize: 16

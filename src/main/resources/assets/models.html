@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<!--
+	Webdesign: Forty by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+	
+	Software: Tobias Eljasik-Swoboda
+	License: TBD.
+-->
+<html>
+	<head>
+		<title>/models</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+		<!-- Wrapper -->
+		<div id="wrapper">
+			<!-- Header -->
+					<header id="header" class="alt">
+						<a href="index.html" class="logo"><strong>TFIDF Feature Extractor</strong> <span>by Tobias Eljasik-Swoboda</span></a>
+						<nav>
+							<a href="#menu">Menu</a>
+						</nav>
+					</header>
+			<!-- Menu -->
+					<nav id="menu">
+						<ul class="links">
+							<li><a href="metadata.html">/metadata</a></li>
+							<li><a href="documents.html">/documents</a></li>
+							<li><a href="categories.html">/categories</a></li>
+							<li><a href="relationships.html">/relationships</a></li>
+							<li><a href="targetfunction.html">/targetfunction</a></li>
+							<li><a href="configurations.html">/configurations</a></li>
+							<li><a href="models.html">/models</a></li>
+							<li><a href="evaluations.html">/evaluations</a></li>
+							<li><a href="activeModel.html">/model</a></li>
+							<li><a href="categorizations.html">/categorizations</a></li>
+							<li><a href="retraining.html">/retraining</a></li>
+						</ul>
+						<ul class="actions stacked">
+							<li><a href="index.html#one" class="button primary fit">Overview</a></li>
+						</ul>
+					</nav>
+			<!-- Main -->
+					<div id="main" class="alt">
+
+						<!-- One -->
+							<section id="one">
+								<div class="inner">
+									<header class="major">
+										<h1>Manage models /models</h1>
+									</header>
+									<ul class="actions">						
+										<li><button id="read">Read all</button></li>
+										<li><button id="create">Create</button></li>
+										<li><button id="delete">Delete all</button></li>
+										<li><a href="index.html#one" class="button next">Back to overview</a></li>
+									</ul>
+									<div id="list"><h2>Available models:</h2></div>
+									<div id="createForm">
+										<h2>Create a model</h2>
+										<div class="fields">
+											<form action="/" id="createF">
+												<div class="field half">
+													<label for="configuration">Configuration:</label>
+													<select name="configuration" id="configuration"></select>
+												</div>
+												<ul class="actions">
+													<li><input type="submit" value="Start training" class="primary" /></li>
+													<li><input type="reset" value="Clear" /></li>
+												</ul>
+											</form>	
+										</div>
+									</div>
+									<div id="deleteConfirm">
+										<h2>Delete all models in this microservice</h2>
+										<p>Note: To delete everything, type delete into the field and press the delete button.</p>
+										<form action="/" id="deleteF">
+											<input type="text" name="delete" placeholder="delete"><br>
+											<input type="submit" value="Delete all" class="primary"/>
+										</form>	
+									</div>
+										
+										
+								</div>
+						</section>
+
+					</div>
+		<!-- Footer -->
+				<footer id="footer">
+					<div class="inner">
+						<ul class="icons">
+							<li><a href="https://github.com/SirTobiSwobi/classifier-trainer" class="icon alt fa-github"><span class="label">GitHub</span></a></li>
+						</ul>
+						<ul class="copyright">
+							<li>&copy; Software License TBD. By Tobias Eljasik-Swoboda</li><li>Visual design: <a href="https://html5up.net">HTML5 UP</a> released under Creative Commons.</li>
+						</ul>
+					</div>
+				</footer>
+			
+		</div>
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/c3.ct.trainer-api.js"></script>
+			<script src="assets/js/c3.ct.models.js"></script>
+	
+	</body>
+</html>

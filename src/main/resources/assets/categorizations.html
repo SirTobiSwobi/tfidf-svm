@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>/categorizations</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+<body class="is-preload">
+<!-- Wrapper -->
+		<div id="wrapper">
+			<!-- Header -->
+					<header id="header" class="alt">
+						<a href="index.html" class="logo"><strong>TFIDF Feature Extractor</strong> <span>by Tobias Eljasik-Swoboda</span></a>
+						<nav>
+							<a href="#menu">Menu</a>
+						</nav>
+					</header>
+			<!-- Menu -->
+					<nav id="menu">
+						<ul class="links">
+							<li><a href="metadata.html">/metadata</a></li>
+							<li><a href="documents.html">/documents</a></li>
+							<li><a href="categories.html">/categories</a></li>
+							<li><a href="relationships.html">/relationships</a></li>
+							<li><a href="targetfunction.html">/targetfunction</a></li>
+							<li><a href="configurations.html">/configurations</a></li>
+							<li><a href="models.html">/models</a></li>
+							<li><a href="evaluations.html">/evaluations</a></li>
+							<li><a href="activeModel.html">/model</a></li>
+							<li><a href="categorizations.html">/categorizations</a></li>
+							<li><a href="retraining.html">/retraining</a></li>
+						</ul>
+						<ul class="actions stacked">
+							<li><a href="index.html#one" class="button primary fit">Overview</a></li>
+						</ul>
+					</nav>
+			<!-- Main -->
+					<div id="main" class="alt">
+
+						<!-- One -->
+							<section id="one">
+								<div class="inner">
+									<header class="major">
+										<h1>Manage automated categorizations /categorizations</h1>
+									</header>
+						<ul class="actions">						
+							<li><button id="read">Read all</button></li>
+							<li><button id="create">Create</button></li>
+							<li><button id="upload">Categorize existing</button></li>
+							<li><button id="delete">Delete all</button></li>
+							<li><a href="index.html#one" class="button next">Back to overview</a></li>
+						</ul>
+						<div id="list"><h2>Available assignments:</h2></div>
+						<div id="createForm">
+							<h2>Categorize/classify a new document</h2>
+							<p>Note: The URL and the textarea are mutually exclusive. If there is a URL, the content from that URL will be added. This overwrites anything in the textarea.</p>
+							<div class="fields">
+								<form action="/" id="createF">
+									<div class="field half">
+										<label for="id">ID:</label>
+										<input type="text" name="id" placeholder="-1 if you don't know the ID" />
+									</div>
+									<div class="field half">
+										<label for="label">Label:</label>
+										<input type="text" name="label" placeholder="Label of the text document" />
+									</div>
+									<div class="field">
+										<label for="content">Content:</label>
+										<textarea name="content" cols="35" rows="4">Your Text</textarea>
+									</div>
+									<div class="field half">
+										<label for="label">URL:</label>
+										<input type="url" name="url" placeholder="http://here.is.your.text.com/text" />
+									</div>
+									<ul class="actions">
+										<li><input type="submit" value="Upload document" class="primary" /></li>
+										<li><input type="reset" value="Clear" /></li>
+									</ul>
+								</form>	
+							</div>
+						</div>
+						<div id="uploadForm">
+							<h2>Categorize/classify an existing document</h2>
+							<form action="/" id="uploadF">
+								<select name="docId" id="docId"></select>
+								<input type="submit" value="Categorize document">
+							</form>	
+						</div>
+						<div id="deleteConfirm">
+							<h2>Delete all assignments in this microservice</h2>
+							<p>Note: To delete everything, type delete into the field and press the delete button.</p>
+							<form action="/" id="deleteF">
+								<input type="text" name="delete" placeholder="delete"><br>
+								<input type="submit" value="Delete all assignments">
+							</form>	
+						</div>			
+					</div><!--Inner-->
+				</section><!--Main-->
+			</div><!--Main-->
+			<!-- Footer -->
+					<footer id="footer">
+						<div class="inner">
+							<ul class="icons">
+								<li><a href="https://github.com/SirTobiSwobi/classifier-trainer" class="icon alt fa-github"><span class="label">GitHub</span></a></li>
+							</ul>
+							<ul class="copyright">
+								<li>&copy; Software License TBD. By Tobias Eljasik-Swoboda</li><li>Visual design: <a href="https://html5up.net">HTML5 UP</a> released under Creative Commons.</li>
+							</ul>
+						</div>
+					</footer>
+		</div><!--Wrapper-->
+		<script src="assets/js/jquery.min.js"></script>
+		<script src="assets/js/jquery.scrolly.min.js"></script>
+		<script src="assets/js/jquery.scrollex.min.js"></script>
+		<script src="assets/js/browser.min.js"></script>
+		<script src="assets/js/breakpoints.min.js"></script>
+		<script src="assets/js/util.js"></script>
+		<script src="assets/js/c3.ct.trainer-api.js"></script>
+		<script src="assets/js/c3.ct.categorizations.js"></script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+	"name":"example",
+	"calls":["GET /example","POST /example"],
+	"algorithm":"example",
+	"phases":"example",
+	"outputFormat":"example",
+	"configuration":"example",
+	"configOptions":"example",
+	"archetype":"example",
+	"runType":"example",
+	"debugExamples":"true"
+}

@@ -1,0 +1,7 @@
+{
+	"categories":[
+		{"id":0,"label":"first category","description":"first description"},
+		{"id":1,"label":"second category","description":"second description"},
+		{"id":2,"label":"third category","description":"third description"}
+	]
+}
