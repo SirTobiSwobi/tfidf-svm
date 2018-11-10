@@ -6,7 +6,9 @@ import org.SirTobiSwobi.c3.tfidfsvm.db.SearchDirection;
 import org.SirTobiSwobi.c3.tfidfsvm.db.Categorization;
 import org.SirTobiSwobi.c3.tfidfsvm.core.Utilities;
 import org.SirTobiSwobi.c3.tfidfsvm.db.CategorizationManager;
+import org.SirTobiSwobi.c3.tfidfsvm.db.Category;
 import org.SirTobiSwobi.c3.tfidfsvm.db.Evaluation;
+import org.SirTobiSwobi.c3.tfidfsvm.db.AVLTree;
 import org.SirTobiSwobi.c3.tfidfsvm.db.Assignment;
 import org.SirTobiSwobi.c3.tfidfsvm.db.Configuration;
 import org.SirTobiSwobi.c3.tfidfsvm.db.Model;
@@ -51,7 +53,19 @@ public class TfidfSvmFold extends Fold {
 		param.p = 0.1;
 		param.shrinking = 1;
 		param.probability = 0;
-		param.nr_weight = 0;
+		//param.nr_weight = 0;
+		/*
+		 * Computing weight labels based on relative assignment amount
+		 */
+		Category[] allCategories = refHub.getCategoryManager().getCategoryArray();
+		param.nr_weight = allCategories.length;
+		int weightLabels[] = new int[allCategories.length];
+		AVLTree<Integer> sumAssignments = new AVLTree<Integer>();
+		int allSumAssignments=0;
+		for(int i=0;i<allCategories.length;i++){
+			weightLabels[i]=(int)allCategories[i].getId();
+		}
+		param.weight_label=weightLabels;
 		
 		svm_problem problem = new svm_problem();
 	    ArrayList<Double> y=new ArrayList<Double>();
@@ -62,8 +76,15 @@ public class TfidfSvmFold extends Fold {
 			Assignment[] explicitAssignments=refHub.getTargetFunctionManager().getDocumentAssignments(trainingIds[i]);
 			for(int j=0;j<explicitAssignments.length;j++){
 				y.add((double)explicitAssignments[j].getCategoryId());
-				double[] features = fe.getVector(explicitAssignments[j].getDocumentId());
-				features = Utilities.normalizeVector(features);			
+				if(!sumAssignments.containsId(explicitAssignments[j].getCategoryId())){
+					sumAssignments.setContent(1, explicitAssignments[j].getCategoryId());
+				}else{
+					sumAssignments.setContent(sumAssignments.getContent(explicitAssignments[j].getCategoryId())+1, explicitAssignments[j].getCategoryId());
+				}
+				allSumAssignments++;
+				//double[] features = fe.getVector(explicitAssignments[j].getDocumentId());
+				//features = Utilities.normalizeVector(features);
+				double[] features = fe.getDimensionNormalizedVector(explicitAssignments[j].getDocumentId());
 				featureVectors.add(LibSvmWrapper.buildSvmNodes(features));
 				
 				appendString+=" svm_nodes for document "+trainingIds[i];
@@ -79,8 +100,15 @@ public class TfidfSvmFold extends Fold {
 					for(int j=0; j<implicitAssignments.length; j++){
 						//appendString = appendString +" Implicitly belongs to category "+implicitAssignments[j]+", ";
 						y.add((double)implicitAssignments[j]);
-						double[] features = fe.getVector(trainingIds[i]);
-						features = Utilities.normalizeVector(features);			
+						if(!sumAssignments.containsId(implicitAssignments[j])){
+							sumAssignments.setContent(1, implicitAssignments[j]);
+						}else{
+							sumAssignments.setContent(sumAssignments.getContent(implicitAssignments[j])+1, implicitAssignments[j]);
+						}
+						allSumAssignments++;
+						//double[] features = fe.getVector(trainingIds[i]);
+						//features = Utilities.normalizeVector(features);	
+						double[] features = fe.getDimensionNormalizedVector(trainingIds[i]);
 						featureVectors.add(LibSvmWrapper.buildSvmNodes(features));
 						
 					}
@@ -89,6 +117,16 @@ public class TfidfSvmFold extends Fold {
 			model.appendToTrainingLog(appendString);
 			model.incrementCompletedSteps();
 	    }
+	    double[] weights = new double[param.nr_weight];
+	    for(int i=0;i<weights.length;i++){
+	    	long catId = (long)param.weight_label[i];
+	    	if(sumAssignments.containsId(catId)){
+	    		weights[i]=(double)sumAssignments.getContent(catId);
+	    	}else{
+	    		weights[i]=0.0;
+	    	}
+	    }
+	    param.weight=weights;
 	    double[] catAssignmentArray=new double[y.size()];
 		svm_node[][] vectors = new svm_node[y.size()][];
 		for(int i=0;i<y.size();i++){
@@ -134,8 +172,9 @@ public class TfidfSvmFold extends Fold {
 				 * Automated assignment: Vector of probabilities of one document belonging to a certain category. 
 				 * (Document - Category - Probability)
 				 */
-				double[] features = fe.getVector(evaluationIds[i]);
-				features = Utilities.normalizeVector(features);			
+				//double[] features = fe.getVector(evaluationIds[i]);
+				//features = Utilities.normalizeVector(features);	
+				double[] features = fe.getDimensionNormalizedVector(evaluationIds[i]);
 				svm_node[] vector = LibSvmWrapper.buildSvmNodes(features);
 				double prediction = svm.svm_predict(svmModel, vector);
 				appendString+=" Prediction for document "+evaluationIds[i]+": "+(long)prediction+" <br />";

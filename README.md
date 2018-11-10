@@ -12,3 +12,4 @@ Version change log:
 - 0.0.2: set up dependencies for libsvm
 - 0.0.3: implemnted libsvm using its default configuration with tfidf feature vectors read from configuration
 - 0.0.4: implemented svm training. RBF gives poor results, linear seperation is an order of magnitude better when using tfidf feature vectors. 
+- 0.0.5: implemented modular evaluation set generation and automated weighting. Up to .79 F1 during n-fold cross-validation. linear still better than RBF

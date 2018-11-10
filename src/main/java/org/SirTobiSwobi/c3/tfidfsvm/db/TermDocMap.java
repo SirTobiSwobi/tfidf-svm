@@ -9,12 +9,14 @@ public class TermDocMap {
 	private AVLTree<AVLTree<Integer>> wordOccurences; //outer AVLTree with documents as index, inner AVLTree with terms as indices
 	private AVLTree<AVLTree<Double>> tfidf;
 	private ArrayList<Long> docIds;
+	private AVLTree<Double> sumDimensionSquares; //indexed by the term index. Square of all term frequency entries for each document containing this term.
 	
 	public TermDocMap(){
 		terms = new ArrayList<String>();
 		documentFrequency = new ArrayList<Integer>();
 		wordOccurences = new AVLTree<AVLTree<Integer>>();
 		docIds = new ArrayList<Long>();
+		sumDimensionSquares = new AVLTree<Double>();
 	}
 	
 	public synchronized void addTermForDoc(String term, long docId){
@@ -68,6 +70,7 @@ public class TermDocMap {
 	
 	public synchronized void computeTfidf(Model model){
 		tfidf = new AVLTree<AVLTree<Double>>();
+		sumDimensionSquares = new AVLTree<Double>();
 		for(int i=0; i<docIds.size(); i++){
 			long docId = docIds.get(i);
 			ArrayList<Long> termIds = wordOccurences.getContent(docId).getUsedIds();
@@ -76,6 +79,12 @@ public class TermDocMap {
 				long termId = termIds.get(j);
 				double tfidfVal=(double)wordOccurences.getContent(docId).getContent(termId)*Math.log((double)docIds.size()/(double)documentFrequency.get((int)termId));
 				tfidfVals.setContent(tfidfVal, termId);
+				if(!sumDimensionSquares.containsId(termId)){
+					sumDimensionSquares.setContent(tfidfVal*tfidfVal, termId);
+				}else{
+					double currentValue = sumDimensionSquares.getContent(termId);
+					sumDimensionSquares.setContent(currentValue+(tfidfVal*tfidfVal), termId);
+				}
 			}
 			tfidf.setContent(tfidfVals, docId);
 			if(model!=null){
@@ -103,7 +112,12 @@ public class TermDocMap {
 
 	public ArrayList<Long> getDocIds() {
 		return docIds;
+	}
+
+	public AVLTree<Double> getSumDimensionSquares() {
+		return sumDimensionSquares;
 	}	
+	
 	
 	
 

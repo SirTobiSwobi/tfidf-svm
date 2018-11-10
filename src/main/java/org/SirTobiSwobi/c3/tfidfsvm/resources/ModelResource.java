@@ -87,7 +87,8 @@ public class ModelResource {
 		for(int i=0;i<controlledVocabulary.length;i++){
 			controlledVocabulary[i]=new TCVocabularyTripel(model.getControlledVocabulary()[i].getId(),
 															model.getControlledVocabulary()[i].getTerm(), 
-															model.getControlledVocabulary()[i].getDocumentFrequency());
+															model.getControlledVocabulary()[i].getDocumentFrequency(),
+															model.getControlledVocabulary()[i].getSumDimensionSquares());
 		}
 		TCModel output = new TCModel(model.getId(), model.getConfiguration().getId(), model.getProgress(), model.getTrainingLog(), configuration, controlledVocabulary, model.getTrainingSetSize());
 		return output;

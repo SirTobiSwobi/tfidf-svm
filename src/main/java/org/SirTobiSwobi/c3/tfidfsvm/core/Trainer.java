@@ -133,8 +133,9 @@ public class Trainer {
 				int vocabId = controlledVocabIds.get(i);
 				String term = tdm.getTerms().get(vocabId);
 				int docFreq = tdm.getDocumentFrequency().get(vocabId);
-				controlledVocabulary[i]=new VocabularyTripel(i,term,docFreq);
-				refHub.getModelManager().getModelByAddress(modelId).appendToTrainingLog("Term: "+vocabId+": "+term+" docFreq: "+docFreq+"<br>");
+				double sumDimSq = tdm.getSumDimensionSquares().getContent(vocabId);
+				controlledVocabulary[i]=new VocabularyTripel(i,term,docFreq, sumDimSq);
+				refHub.getModelManager().getModelByAddress(modelId).appendToTrainingLog("Term: "+vocabId+": "+term+" docFreq: "+docFreq+" sumDimSq: "+sumDimSq+"<br>");
 			}
 			refHub.getModelManager().getModelByAddress(modelId).setControlledVocabulary(controlledVocabulary);
 			performNFoldCrossValidation();
@@ -217,11 +218,26 @@ public class Trainer {
 				end=allIds.length;
 			}
 			
-			long[] evaluationIds = Arrays.copyOfRange(allIds, start, end);
+			//long[] evaluationIds = Arrays.copyOfRange(allIds, start, end);
+			long[] evaluationIds = computeModularEvaluationIds(allIds, folds, i);
 			long[] trainingIds = computeTrainingIdsFromEvaluationIds(allIds,evaluationIds);
 			
 			(new TfidfSvmFold(refHub, trainingIds, evaluationIds, i, modelId, trainingSession, this, configId)).start();
 		}	
+	}
+	
+	private long[] computeModularEvaluationIds(long[] allIds, int folds, int fold){
+		ArrayList<Long> relevantIds=new ArrayList<Long>();
+		for(int i=0;i<allIds.length;i++){
+			if(allIds[i]%folds==fold){
+				relevantIds.add(allIds[i]);
+			}
+		}
+		long[] evaluationIds = new long[relevantIds.size()];
+		for(int i=0;i<evaluationIds.length; i++){
+			evaluationIds[i]=relevantIds.get(i);
+		}
+		return evaluationIds;
 	}
 	
 	public synchronized void selectBestEvaluation(){

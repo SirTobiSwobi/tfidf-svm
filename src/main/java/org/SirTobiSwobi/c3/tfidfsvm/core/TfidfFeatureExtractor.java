@@ -42,6 +42,31 @@ public class TfidfFeatureExtractor implements FeatureExtractor{
 		}
 		return vector;
 	}
+	
+	public double[] getDimensionNormalizedVector(long docId){
+		Document doc = refHub.getDocumentManager().getByAddress(docId);
+		String text = doc.getLabel()+" "+doc.getContent();
+		return getDimensionNormalzedVector(text);
+	}
+	
+	public double[] getDimensionNormalzedVector(String text){
+		int[] occurences = new int[model.getControlledVocabulary().length];
+		double[] vector = new double[model.getControlledVocabulary().length];
+		text = Utilities.sanitizeTextRemoveDigits(text);
+		String[] words = text.split(" ");
+		for(int i=0;i<words.length;i++){
+			int termId=model.getTermId(words[i]);
+			if(termId!=-1){
+				occurences[termId]++;
+			}
+		}
+		for(int i=0;i<vector.length;i++){
+			vector[i]=(double)occurences[i]*Math.log(model.getTrainingSetSize()/((double)model.getControlledVocabulary()[i].getDocumentFrequency()+1.0)); 
+			//divide by sumDimensionSquares
+			vector[i]=vector[i]/Math.sqrt(model.getControlledVocabulary().clone()[i].getSumDimensionSquares());
+		}
+		return vector;
+	}
 
 	public Model getModel() {
 		return model;

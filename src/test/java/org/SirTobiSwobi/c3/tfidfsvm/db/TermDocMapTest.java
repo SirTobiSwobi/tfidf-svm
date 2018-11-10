@@ -33,6 +33,30 @@ public class TermDocMapTest {
 		tdm.addTermForDoc("first", 3);
 		tdm.computeDocumentFrequency();
 		assertTrue("Document Frequency of first should still be 3",tdm.getDocumentFrequency().get(0)==3);
+		assertTrue("Sum Dimension Square of 1 should be log(2)^2",tdm.getSumDimensionSquares().getContent(1)==Math.log(2)*Math.log(2));
+		
+		tdm = new TermDocMap();
+		String text = "the text of the zero index document";
+		String[] words = text.split(" ");
+		for(int i=0; i<words.length;i++){
+			tdm.addTermForDoc(words[i],0);
+		}
+		text= "the quick brown fox jumps over the lazy rabbit";
+		words = text.split(" ");
+		for(int i=0; i<words.length;i++){
+			tdm.addTermForDoc(words[i],1);
+		}
+		text = "coming up with arbitrary text is annoying";
+		words = text.split(" ");
+		for(int i=0; i<words.length;i++){
+			tdm.addTermForDoc(words[i],2);
+		}
+		tdm.computeDocumentFrequency();
+		tdm.computeTfidf(null);
+		/*
+		fail("\n term 0: "+tdm.getTerms().get(0)+" docFreq: "+tdm.getDocumentFrequency().get(0)+" tfidf(d0) "+tdm.getTfidf().getContent(0).getContent(0)+
+				" tfidf(d1) "+tdm.getTfidf().getContent(1).getContent(0)+" sumSquares: "+tdm.getSumDimensionSquares().getContent(0));*/
+		
 	}
 
 }
