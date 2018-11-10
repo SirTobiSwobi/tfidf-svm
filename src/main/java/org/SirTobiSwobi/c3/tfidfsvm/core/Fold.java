@@ -17,12 +17,12 @@ import org.SirTobiSwobi.c3.tfidfsvm.db.TrainingSession;
 import ch.qos.logback.access.servlet.Util;
 
 public class Fold extends Thread {
-	private ReferenceHub refHub;
-	private long[] trainingIds, evaluationIds;
-	private int foldId;
-	private long modelId, configId;
-	private TrainingSession trainingSession;
-	private Trainer trainer;
+	protected ReferenceHub refHub;
+	protected long[] trainingIds, evaluationIds;
+	protected int foldId;
+	protected long modelId, configId;
+	protected TrainingSession trainingSession;
+	protected Trainer trainer;
 	
 	public Fold(ReferenceHub refHub, long[] trainingIds, long[] evaluationIds, int foldId, long modelId, TrainingSession trainingSession, Trainer trainer, long configId) {
 		super();

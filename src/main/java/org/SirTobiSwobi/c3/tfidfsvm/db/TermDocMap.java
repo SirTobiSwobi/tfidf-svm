@@ -79,7 +79,7 @@ public class TermDocMap {
 			}
 			tfidf.setContent(tfidfVals, docId);
 			if(model!=null){
-				model.appendToTrainingLog("Computed TFIDF for document "+docId);
+				//model.appendToTrainingLog("Computed TFIDF for document "+docId);
 				model.incrementCompletedSteps();
 			}	
 		}

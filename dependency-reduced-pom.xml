@@ -4,7 +4,7 @@
   <groupId>org.SirTobiSwobi.c3</groupId>
   <artifactId>tfidfsvm</artifactId>
   <name>tfidfsvm</name>
-  <version>0.0.2-SNAPSHOT</version>
+  <version>0.0.4-SNAPSHOT</version>
   <description>tfidf feature extraction implementation with libsvm svm implementation</description>
   <build>
     <plugins>

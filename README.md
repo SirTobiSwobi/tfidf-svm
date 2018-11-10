@@ -10,3 +10,5 @@ Version change log:
 
 - 0.0.1: running clone of tfidf v0.1.5 implementing classifier-trainer API
 - 0.0.2: set up dependencies for libsvm
+- 0.0.3: implemnted libsvm using its default configuration with tfidf feature vectors read from configuration
+- 0.0.4: implemented svm training. RBF gives poor results, linear seperation is an order of magnitude better when using tfidf feature vectors. 

@@ -16,6 +16,8 @@ import org.SirTobiSwobi.c3.tfidfsvm.db.TermDocMap;
 import org.SirTobiSwobi.c3.tfidfsvm.db.TrainingSession;
 import org.SirTobiSwobi.c3.tfidfsvm.db.VocabularyTripel;
 
+import libsvm.svm_model;
+
 public class Trainer {
 	private ReferenceHub refHub;
 	private int openEvaluations, openFeatureExtractions, folds;
@@ -26,6 +28,7 @@ public class Trainer {
 	private ArrayList<Long> relevantDocIds;
 	TrainingSession trainingSession;
 	TermDocMap tdm;
+	private svm_model[] svmModels;
 	
 	public Trainer(ReferenceHub refHub) {
 		super();
@@ -65,6 +68,7 @@ public class Trainer {
 		refHub.getModelManager().setTrainingInProgress(true);
 		Configuration config = refHub.getConfigurationManager().getByAddress(configId);
 		folds = config.getFolds();
+		this.svmModels = new svm_model[folds];
 		this.openEvaluations=folds;
 		this.openFeatureExtractions=featureExtractionThreads;//Word counter threads 
 		this.modelId=modelId; // There is always only one active training session per microservice. 
@@ -168,9 +172,11 @@ public class Trainer {
 			Assignment[] ass = refHub.getTargetFunctionManager().getCategoryAssignments(cats[i].getId());
 			double[] maxTfidf = new double[idsPerCat];
 			int[] maxIndex = new int[idsPerCat];
-			for(int j=0;j<idsPerCat;j++){
+			for(int j=0;j<idsPerCat;j++){	
 				for(int k=0; k<ass.length;k++){
 					long docId = ass[k].getDocumentId();
+					double maxDocTfidf=0.0;	//otherwise many documents can have no non-zero values in their feature vectors. So now the top of all docs + top N per Category
+					int maxDocIndex=-1;
 					AVLTree<Double> values=tdm.getTfidf().getContent(docId);
 					ArrayList<Long> termIds = values.getUsedIds();
 					for(int l=0; l<termIds.size();l++){
@@ -179,11 +185,19 @@ public class Trainer {
 							maxTfidf[j]=values.getContent(termId);
 							maxIndex[j] = (int) termId;
 						}
+						if(values.getContent(termId)>maxDocTfidf){
+							maxDocTfidf=values.getContent(termId);
+							maxDocIndex=(int) termId;
+						}
+					}
+					if(!ids.contains(maxDocIndex)){
+						ids.add(maxDocIndex);
 					}
 				}
 				if(!ids.contains(maxIndex[j])){
 					ids.add(maxIndex[j]);
 				}
+				
 			}
 			
 			
@@ -206,7 +220,7 @@ public class Trainer {
 			long[] evaluationIds = Arrays.copyOfRange(allIds, start, end);
 			long[] trainingIds = computeTrainingIdsFromEvaluationIds(allIds,evaluationIds);
 			
-			(new Fold(refHub, trainingIds, evaluationIds, i, modelId, trainingSession, this, configId)).start();
+			(new TfidfSvmFold(refHub, trainingIds, evaluationIds, i, modelId, trainingSession, this, configId)).start();
 		}	
 	}
 	
@@ -273,5 +287,9 @@ public class Trainer {
 			model.appendToTrainingLog(" Best evaluation following the "+selectionPolicy.toString()+" Policy is: "+evaluations[maxId].getFoldId());
 			refHub.getModelManager().setTrainingInProgress(false);
 		}
+	}
+	
+	public void setSvmModelForFold(svm_model model, int fold){
+		this.svmModels[fold]=model;
 	}
 }

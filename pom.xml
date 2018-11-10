@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.SirTobiSwobi.c3</groupId>
   <artifactId>tfidfsvm</artifactId>
-  <version>0.0.2-SNAPSHOT</version>
+  <version>0.0.4-SNAPSHOT</version>
   <name>tfidfsvm</name>
   <description>tfidf feature extraction implementation with libsvm svm implementation</description>
   <properties>

@@ -154,7 +154,7 @@ public class TfidfSvmApplication extends Application<TfidfSvmConfiguration> {
 		environment.jersey().register(categorizations);
 		environment.jersey().register(retraining);
 		
-		Configuration cfgn = new Configuration(1,2, true, 0.5,SelectionPolicy.MicroaverageF1, 10);
+		Configuration cfgn = new Configuration(1,3, true, 0.5,SelectionPolicy.MicroaverageF1, 20);
 		confMan.setConfiguration(cfgn);
 		
 		
