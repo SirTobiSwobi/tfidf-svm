@@ -1,5 +1,7 @@
 package org.SirTobiSwobi.c3.tfidfsvm.resources;
 
+import java.util.ArrayList;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -12,6 +14,7 @@ import javax.ws.rs.core.Response;
 
 import org.SirTobiSwobi.c3.tfidfsvm.api.TCHash;
 import org.SirTobiSwobi.c3.tfidfsvm.api.TCModel;
+import org.SirTobiSwobi.c3.tfidfsvm.api.TCModelList;
 import org.SirTobiSwobi.c3.tfidfsvm.api.TCModels;
 import org.SirTobiSwobi.c3.tfidfsvm.api.TCProgress;
 import org.SirTobiSwobi.c3.tfidfsvm.core.Trainer;
@@ -39,6 +42,7 @@ public class ModelsResource {
 			TCHash h = new TCHash("models",refHub.getModelManager().getModelHash());
 			return Response.ok(h).build();
 		}else{
+			/*
 			Model[] models = refHub.getModelManager().getModelArray();
 			TCModel[] TCmodelArray = new TCModel[models.length];
 			for(int i=0; i<models.length;i++){
@@ -53,8 +57,16 @@ public class ModelsResource {
 				TCmodels = new TCModels();
 			}
 			return Response.ok(TCmodels).build();
+			*/
+			ArrayList<Long> modelIds = refHub.getModelManager().getUsedIds();
+			TCProgress[] progresses = new TCProgress[modelIds.size()];
+			for(int i=0;i<modelIds.size();i++){
+				long modelId = modelIds.get(i);
+				progresses[i] = new TCProgress(modelId,"models/"+modelIds.get(i),refHub.getModelManager().getModelByAddress(modelId).getProgress());
 				
-				
+			}
+			TCModelList TCModelList = new TCModelList(progresses);
+			return Response.ok(TCModelList).build();	
 		}	
 	}
 	
@@ -69,13 +81,13 @@ public class ModelsResource {
 			//Spawn training progress
 			if(!refHub.getModelManager().isTrainingInProgress()){
 				long modId=refHub.getModelManager().addModelWithoutId(conf);
-				TCProgress progress = new TCProgress("/models/"+modId,.0);
+				TCProgress progress = new TCProgress(modId,"/models/"+modId,.0);
 				trainer.startTraining(conf, modId);
 				Response response = Response.ok(progress).build();
 				return response;
 			}else{
 				long modId=refHub.getModelManager().getMaxId();//computes currently used modelId;
-				TCProgress progress = new TCProgress("/models/"+modId,refHub.getModelManager().getModelByAddress(modId).getProgress());
+				TCProgress progress = new TCProgress(modId,"/models/"+modId,refHub.getModelManager().getModelByAddress(modId).getProgress());
 				Response response = Response.ok(progress).build();
 				return response;
 			}

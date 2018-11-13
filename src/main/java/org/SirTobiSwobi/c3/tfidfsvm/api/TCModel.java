@@ -10,12 +10,14 @@ public class TCModel {
 	private TCConfiguration configuration;
 	private TCVocabularyTripel[] controlledVocabulary;
 	private int trainingSetSize;
+	private TCSvmModel svmModel;
 	
 	public TCModel(){
 		//Jackson deserialization
 	}
 
-	public TCModel(long id, long configurationId, double progress, String trainingLog, TCConfiguration configuration, TCVocabularyTripel[] controlledVocabulary, int trainingSetSize) {
+	public TCModel(long id, long configurationId, double progress, String trainingLog, TCConfiguration configuration, 
+			TCVocabularyTripel[] controlledVocabulary, int trainingSetSize, TCSvmModel svmModel) {
 		super();
 		this.id = id;
 		this.configurationId = configurationId;
@@ -24,6 +26,7 @@ public class TCModel {
 		this.configuration = configuration;
 		this.controlledVocabulary=controlledVocabulary;
 		this.trainingSetSize=trainingSetSize;
+		this.svmModel = svmModel;
 	}
 	
 	@JsonProperty
@@ -60,7 +63,10 @@ public class TCModel {
 	public int getTrainingSetSize() {
 		return trainingSetSize;
 	}
-	
-	
+
+	@JsonProperty
+	public TCSvmModel getSvmModel() {
+		return svmModel;
+	}	
 	
 }

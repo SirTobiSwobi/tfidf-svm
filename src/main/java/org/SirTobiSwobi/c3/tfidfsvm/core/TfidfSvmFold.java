@@ -114,7 +114,7 @@ public class TfidfSvmFold extends Fold {
 					}
 				}
 			}
-			model.appendToTrainingLog(appendString);
+			//model.appendToTrainingLog(appendString);
 			model.incrementCompletedSteps();
 	    }
 	    double[] weights = new double[param.nr_weight];
@@ -148,7 +148,7 @@ public class TfidfSvmFold extends Fold {
 			appendString+="y[i]="+problem.y[i]+"<br />";
 		}
 		
-		model.appendToTrainingLog(appendString);
+		//model.appendToTrainingLog(appendString);
 		
 		try
 		{
@@ -179,7 +179,7 @@ public class TfidfSvmFold extends Fold {
 				double prediction = svm.svm_predict(svmModel, vector);
 				appendString+=" Prediction for document "+evaluationIds[i]+": "+(long)prediction+" <br />";
 				evalCznMan.addCategorizationWithoutId(evaluationIds[i], (long)prediction, 1.0);
-				model.appendToTrainingLog(appendString);
+			//	model.appendToTrainingLog(appendString);
 				model.incrementCompletedSteps();
 				
 				if(includeImplicits){
@@ -199,7 +199,7 @@ public class TfidfSvmFold extends Fold {
 							}
 						}
 					}
-					model.appendToTrainingLog(appendString);
+					//model.appendToTrainingLog(appendString);
 				}
 			}
 			appendString = "Fold "+foldId+" summarized categorizations: <br />";
@@ -210,7 +210,7 @@ public class TfidfSvmFold extends Fold {
 							" with probability "+czn[j].getProbability()+" <br />";
 				}
 			}
-			model.appendToTrainingLog(appendString);
+			//model.appendToTrainingLog(appendString);
 			String evalDescription = "Fold "+foldId;
 			Assignment[] relevantAssignments=null;
 			for(int i=0; i<evaluationIds.length; i++){

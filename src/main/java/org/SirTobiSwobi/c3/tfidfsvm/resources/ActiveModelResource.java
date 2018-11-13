@@ -17,16 +17,21 @@ import javax.ws.rs.core.Response;
 
 import org.SirTobiSwobi.c3.tfidfsvm.api.TCConfiguration;
 import org.SirTobiSwobi.c3.tfidfsvm.api.TCModel;
+import org.SirTobiSwobi.c3.tfidfsvm.core.LibSvmWrapper;
 import org.SirTobiSwobi.c3.tfidfsvm.db.Configuration;
 import org.SirTobiSwobi.c3.tfidfsvm.db.Model;
 import org.SirTobiSwobi.c3.tfidfsvm.db.ReferenceHub;
 import org.SirTobiSwobi.c3.tfidfsvm.db.SelectionPolicy;
 import org.SirTobiSwobi.c3.tfidfsvm.db.VocabularyTripel;
 import org.SirTobiSwobi.c3.tfidfsvm.resources.ModelResource;
+import org.SirTobiSwobi.c3.tfidfsvm.api.TCSvmNode;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.dropwizard.jackson.Jackson;
+import libsvm.svm_model;
+import libsvm.svm_node;
+import libsvm.svm_parameter;
 
 @Path("/model")
 @Produces(MediaType.APPLICATION_JSON)
@@ -76,7 +81,27 @@ public class ActiveModelResource {
 			ObjectMapper MAPPER = Jackson.newObjectMapper();
 			try{
 				TCModel retrievedModel = MAPPER.readValue(content, TCModel.class);
-				org.SirTobiSwobi.c3.tfidfsvm.api.TCConfiguration configuration = retrievedModel.getConfiguration();
+				
+				svm_model svmModel = new svm_model();
+				svm_parameter param = new svm_parameter();
+				param.svm_type = LibSvmWrapper.getIdForSvmType(retrievedModel.getSvmModel().getSvm_type());
+				param.kernel_type = LibSvmWrapper.getIdForSvmType(retrievedModel.getSvmModel().getKernel_type());
+				param.gamma = retrievedModel.getSvmModel().getGamma();
+				param.coef0 = retrievedModel.getSvmModel().getCoef0();
+				svmModel.param=param;
+				svmModel.nr_class = retrievedModel.getSvmModel().getNr_class();
+				svmModel.l = retrievedModel.getSvmModel().getTotal_sv();
+				svmModel.rho = retrievedModel.getSvmModel().getRho();
+				svmModel.label = retrievedModel.getSvmModel().getLabel();
+				svmModel.probA = retrievedModel.getSvmModel().getProbA();
+				svmModel.probB = retrievedModel.getSvmModel().getProbB();
+				svmModel.nSV = retrievedModel.getSvmModel().getNr_sv();
+				svmModel.sv_coef = retrievedModel.getSvmModel().getSv_coef();
+				TCSvmNode[][] tcVectors = retrievedModel.getSvmModel().getSvm_node();
+				svm_node[][] vectors = LibSvmWrapper.buildSupportVectors(tcVectors);
+				svmModel.SV=vectors;
+				
+				TCConfiguration configuration = retrievedModel.getConfiguration();
 				SelectionPolicy selectionPolicy = SelectionPolicy.MicroaverageF1;
 				if(configuration.getSelectionPolicy().equals("MicroaverageF1")){
 					selectionPolicy=SelectionPolicy.MicroaverageF1;
@@ -95,7 +120,7 @@ public class ActiveModelResource {
 						selectionPolicy, configuration.getTopTermsPerCat());
 				Model activeModel = new Model(retrievedModel.getId(), conf, retrievedModel.getTrainingLog(),
 											VocabularyTripel.buildControlledVocabulary(retrievedModel.getControlledVocabulary()), 
-											retrievedModel.getTrainingSetSize());
+											retrievedModel.getTrainingSetSize(), svmModel);
 				refHub.setActiveModel(activeModel);
 			}catch(Exception e){
 				return Response.status(404).build();
@@ -104,6 +129,26 @@ public class ActiveModelResource {
 			return Response.ok().build();
 		}else if(model!=null){
 			TCConfiguration configuration = model.getConfiguration();
+			
+			svm_model svmModel = new svm_model();
+			svm_parameter param = new svm_parameter();
+			param.svm_type = LibSvmWrapper.getIdForSvmType(model.getSvmModel().getSvm_type());
+			param.kernel_type = LibSvmWrapper.getIdForSvmType(model.getSvmModel().getKernel_type());
+			param.gamma = model.getSvmModel().getGamma();
+			param.coef0 = model.getSvmModel().getCoef0();				
+			svmModel.param=param;
+			svmModel.nr_class = model.getSvmModel().getNr_class();
+			svmModel.l = model.getSvmModel().getTotal_sv();
+			svmModel.rho = model.getSvmModel().getRho();
+			svmModel.label = model.getSvmModel().getLabel();
+			svmModel.probA = model.getSvmModel().getProbA();
+			svmModel.probB = model.getSvmModel().getProbB();
+			svmModel.nSV = model.getSvmModel().getNr_sv();
+			svmModel.sv_coef = model.getSvmModel().getSv_coef();
+			TCSvmNode[][] tcVectors = model.getSvmModel().getSvm_node();
+			svm_node[][] vectors = LibSvmWrapper.buildSupportVectors(tcVectors);
+			svmModel.SV=vectors;		
+			
 			SelectionPolicy selectionPolicy = SelectionPolicy.MicroaverageF1;
 			if(configuration.getSelectionPolicy().equals("MicroaverageF1")){
 				selectionPolicy=SelectionPolicy.MicroaverageF1;
@@ -120,7 +165,8 @@ public class ActiveModelResource {
 			}
 			Configuration conf = new Configuration(configuration.getId(), configuration.getFolds(), configuration.isIncludeImplicits(), configuration.getAssignmentThreshold(),
 					selectionPolicy, configuration.getTopTermsPerCat());
-			Model activeModel = new Model(model.getId(), conf, model.getTrainingLog(), VocabularyTripel.buildControlledVocabulary(model.getControlledVocabulary()), model.getTrainingSetSize());
+			Model activeModel = new Model(model.getId(), conf, model.getTrainingLog(), 
+						VocabularyTripel.buildControlledVocabulary(model.getControlledVocabulary()), model.getTrainingSetSize(), svmModel);
 			refHub.setActiveModel(activeModel);
 			refHub.setNeedsRetraining(false);
 			return Response.ok().build();

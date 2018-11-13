@@ -1,5 +1,7 @@
 package org.SirTobiSwobi.c3.tfidfsvm.db;
 
+import libsvm.svm_model;
+
 public class Model {
 	private long id;
 	private long configurationId; //Storing what this model is based on.
@@ -10,8 +12,9 @@ public class Model {
 	private Configuration configuration;
 	private VocabularyTripel[] controlledVocabulary;
 	private int trainingSetSize;
+	private svm_model svmModel;
 	
-	public Model(long id, Configuration configuration, VocabularyTripel[] controlledVocabulary, int trainingSetSize) {
+	public Model(long id, Configuration configuration, VocabularyTripel[] controlledVocabulary, int trainingSetSize, svm_model svmModel) {
 		super();
 		this.id = id;
 		this.configuration=configuration;
@@ -21,10 +24,11 @@ public class Model {
 		this.completed=0;
 		this.controlledVocabulary=controlledVocabulary;
 		this.trainingSetSize=trainingSetSize;
+		this.svmModel=svmModel;
 		
 	}
 	
-	public Model(long id, Configuration configuration, String trainingLog, VocabularyTripel[] controlledVocabulary, int trainingSetSize) {
+	public Model(long id, Configuration configuration, String trainingLog, VocabularyTripel[] controlledVocabulary, int trainingSetSize, svm_model svmModel) {
 		super();
 		this.id = id;
 		this.configuration=configuration;
@@ -34,6 +38,7 @@ public class Model {
 		this.completed=10; //only used for active Model when put there. Training progress is always completed.
 		this.controlledVocabulary=controlledVocabulary;
 		this.trainingSetSize=trainingSetSize;
+		this.svmModel=svmModel;
 	}
 	
 
@@ -123,7 +128,13 @@ public class Model {
 	public void setTrainingSetSize(int trainingSetSize) {
 		this.trainingSetSize = trainingSetSize;
 	}
-	
-	
+
+	public svm_model getSvmModel() {
+		return svmModel;
+	}
+
+	public void setSvmModel(svm_model svmModel) {
+		this.svmModel = svmModel;
+	}
 	
 }

@@ -17,6 +17,10 @@ import org.SirTobiSwobi.c3.tfidfsvm.db.Configuration;
 import org.SirTobiSwobi.c3.tfidfsvm.db.Model;
 import org.SirTobiSwobi.c3.tfidfsvm.db.ReferenceHub;
 import org.SirTobiSwobi.c3.tfidfsvm.db.SelectionPolicy;
+import org.SirTobiSwobi.c3.tfidfsvm.api.TCSvmModel;
+import org.SirTobiSwobi.c3.tfidfsvm.api.TCSvmNode;
+import org.SirTobiSwobi.c3.tfidfsvm.core.LibSvmWrapper;
+import org.SirTobiSwobi.c3.tfidfsvm.core.Utilities;
 
 @Path("/models/{mod}")
 @Produces(MediaType.APPLICATION_JSON)
@@ -90,7 +94,26 @@ public class ModelResource {
 															model.getControlledVocabulary()[i].getDocumentFrequency(),
 															model.getControlledVocabulary()[i].getSumDimensionSquares());
 		}
-		TCModel output = new TCModel(model.getId(), model.getConfiguration().getId(), model.getProgress(), model.getTrainingLog(), configuration, controlledVocabulary, model.getTrainingSetSize());
+		org.SirTobiSwobi.c3.tfidfsvm.api.TCSvmModel svmModel=null;
+		if(model.getSvmModel()!=null){	
+		TCSvmNode[][] SV=LibSvmWrapper.buildSupportVectors(model.getSvmModel().SV);
+		svmModel = new TCSvmModel(LibSvmWrapper.svm_type_table[model.getSvmModel().param.svm_type],
+							LibSvmWrapper.kernel_type_table[model.getSvmModel().param.kernel_type],
+							model.getSvmModel().param.degree, 
+							model.getSvmModel().param.gamma,
+							model.getSvmModel().param.coef0,
+							model.getSvmModel().nr_class,
+							model.getSvmModel().l, 
+							model.getSvmModel().rho,
+							model.getSvmModel().label, 
+							model.getSvmModel().probA, 
+							model.getSvmModel().probB, 
+							model.getSvmModel().nSV, 
+							model.getSvmModel().sv_coef,
+							SV
+				);
+		}
+		TCModel output = new TCModel(model.getId(), model.getConfiguration().getId(), model.getProgress(), model.getTrainingLog(), configuration, controlledVocabulary, model.getTrainingSetSize(), svmModel);
 		return output;
 	}
 	

@@ -102,6 +102,7 @@ public class Trainer {
 		for(int i=0;i<allIds.length;i++){
 			allIds[i]=relevantDocIds.get(i);
 		}
+		//System.out.println("allIds.length "+allIds.length);
 		
 		tdm = new TermDocMap();
 		
@@ -111,7 +112,9 @@ public class Trainer {
 			if(i==featureExtractionThreads-1){
 				end=allIds.length;
 			}
-			long[] relevantIds = Arrays.copyOfRange(allIds, start, end);
+			//long[] relevantIds = Arrays.copyOfRange(allIds, start, end);
+			//long[] evaluationIds = computeModularEvaluationIds(allIds, folds, i);
+			long[] relevantIds = computeModularEvaluationIds(allIds,featureExtractionThreads,i);
 			(new WordCounter(refHub,relevantIds,tdm,i, modelId, this)).start();
 			
 		}
@@ -131,11 +134,20 @@ public class Trainer {
 			VocabularyTripel[] controlledVocabulary = new VocabularyTripel[controlledVocabIds.size()];
 			for(int i=0;i<controlledVocabIds.size();i++){
 				int vocabId = controlledVocabIds.get(i);
-				String term = tdm.getTerms().get(vocabId);
-				int docFreq = tdm.getDocumentFrequency().get(vocabId);
-				double sumDimSq = tdm.getSumDimensionSquares().getContent(vocabId);
-				controlledVocabulary[i]=new VocabularyTripel(i,term,docFreq, sumDimSq);
-				refHub.getModelManager().getModelByAddress(modelId).appendToTrainingLog("Term: "+vocabId+": "+term+" docFreq: "+docFreq+" sumDimSq: "+sumDimSq+"<br>");
+				try{
+					String term = tdm.getTerms().get(vocabId);
+					int docFreq = tdm.getDocumentFrequency().get(vocabId);
+					double sumDimSq = tdm.getSumDimensionSquares().getContent(vocabId);
+					controlledVocabulary[i]=new VocabularyTripel(i,term,docFreq, sumDimSq);
+					//refHub.getModelManager().getModelByAddress(modelId).appendToTrainingLog("Term: "+vocabId+": "+term+" docFreq: "+docFreq+" sumDimSq: "+sumDimSq+"<br>");
+				}catch(Exception e){
+					System.out.println(e.getMessage());
+					System.out.println("Terms: "+ tdm.getTerms().size());
+					System.out.println("VocabId: "+vocabId);
+					System.out.println("Feature Extraction Threads:"+featureExtractionThreads);
+				}
+				
+				
 			}
 			refHub.getModelManager().getModelByAddress(modelId).setControlledVocabulary(controlledVocabulary);
 			performNFoldCrossValidation();
@@ -148,7 +160,7 @@ public class Trainer {
 			appendString+=" ("+tdm.getTerms().get(i);
 			appendString+=", "+tdm.getDocumentFrequency().get(i)+") ";
 		}
-		refHub.getModelManager().getModelByAddress(modelId).appendToTrainingLog(appendString);
+		//refHub.getModelManager().getModelByAddress(modelId).appendToTrainingLog(appendString);
 		Document[] docs = refHub.getDocumentManager().getDocumentArray();
 		for(int i=0; i<docs.length;i++){
 			long docId=docs[i].getId();
@@ -251,7 +263,7 @@ public class Trainer {
 			Model model = refHub.getModelManager().getModelByAddress(modelId);
 			SelectionPolicy selectionPolicy = refHub.getConfigurationManager().getByAddress(configId).getSelectionPolicy();
 			Evaluation[] evaluations = trainingSession.getEvaluationArray();	
-			model.appendToTrainingLog("There are "+evaluations.length+" evaluations.");
+			//model.appendToTrainingLog("There are "+evaluations.length+" evaluations.");
 			double maxValue=0.0;
 			int maxId=0;
 			for(int i=0; i<evaluations.length; i++){
@@ -267,7 +279,7 @@ public class Trainer {
 							" precision: "+eval.getPrecision(categories[j].getId())+" recall "+eval.getRecall(categories[j].getId())+
 							" F1: "+eval.getF1(categories[j].getId());
 				}
-				model.appendToTrainingLog(appendString);
+				//model.appendToTrainingLog(appendString);
 				if(selectionPolicy==SelectionPolicy.MicroaverageF1){
 					if(eval.getMicroaverageF1()>maxValue){
 						maxValue=eval.getMicroaverageF1();
@@ -300,6 +312,7 @@ public class Trainer {
 					}
 				}
 			}
+			model.setSvmModel(svmModels[maxId]);
 			model.appendToTrainingLog(" Best evaluation following the "+selectionPolicy.toString()+" Policy is: "+evaluations[maxId].getFoldId());
 			refHub.getModelManager().setTrainingInProgress(false);
 		}

@@ -3,6 +3,7 @@ package org.SirTobiSwobi.c3.tfidfsvm.api;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class TCProgress {
+	private long id;
 	private String address;
 	private double progress;
 	
@@ -10,8 +11,9 @@ public class TCProgress {
 		//Jackson deserialization
 	}
 
-	public TCProgress(String modelAddress, double progress) {
+	public TCProgress(long id, String modelAddress, double progress) {
 		super();
+		this.id = id;
 		this.address = modelAddress;
 		this.progress = progress;
 	}
@@ -24,6 +26,11 @@ public class TCProgress {
 	@JsonProperty
 	public double getProgress() {
 		return progress;
+	}
+	
+	@JsonProperty
+	public long getId(){
+		return id;
 	}
 	
 	

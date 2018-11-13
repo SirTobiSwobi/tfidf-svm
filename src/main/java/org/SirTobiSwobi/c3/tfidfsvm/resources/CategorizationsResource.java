@@ -110,7 +110,7 @@ public class CategorizationsResource {
 			
 		}
 		classifier.categorizeDocument(docId);
-		TCProgress progress = new TCProgress("/categorizations/documents/"+docId,0.0);
+		TCProgress progress = new TCProgress(docId,"/categorizations/documents/"+docId,0.0);
 		//URI location = UriBuilder.fromPath("/documents").build();
 		Response response = Response.ok(progress).build();
 		return response;
@@ -123,7 +123,7 @@ public class CategorizationsResource {
 			return Response.status(404).build();
 		}
 		classifier.categorizeDocument(docId);
-		TCProgress progress = new TCProgress("/categorizations/documents/"+docId,0.0);
+		TCProgress progress = new TCProgress(docId,"/categorizations/documents/"+docId,0.0);
 		//URI location = UriBuilder.fromPath("/documents").build();
 		Response response = Response.ok(progress).build();
 		return response;

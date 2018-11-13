@@ -22,7 +22,7 @@ public class ModelManagerTest {
 		cfgn = new Configuration(5,5, true, 0.4,SelectionPolicy.MicroaverageRecall, 15);
 		confMan.setConfiguration(cfgn);
 		
-		Model model = new Model(0,confMan.getByAddress(0),null,0);
+		Model model = new Model(0,confMan.getByAddress(0),null,0,null);
 		ModelManager modMan = new ModelManager();
 		
 		ReferenceHub refHub = new ReferenceHub(null, null, null, confMan, modMan, null, null, null);

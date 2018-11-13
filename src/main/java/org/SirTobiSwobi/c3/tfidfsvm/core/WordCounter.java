@@ -24,19 +24,23 @@ public class WordCounter extends Thread {
 	}
 	
 	public void run(){
+		String appendString = "Starting word counter "+wordCounterId+" <br>";
+		appendString += "Examining "+relevantIds.length+" documents.<br>";
 		for(int i=0; i<relevantIds.length;i++){
 			long docId = relevantIds[i];
 			Document doc = refHub.getDocumentManager().getByAddress(docId);
 			String text = doc.getLabel()+" "+doc.getContent();
 			text = Utilities.sanitizeTextRemoveDigits(text);
 			String[] words = text.split(" ");
-			//String log="WordCounter "+wordCounterId+"counted terms for doc: "+docId+": "+words.length+" words.<br>";
+			appendString +="WordCounter "+wordCounterId+"counted terms for doc: "+docId+": "+words.length+" words.<br>";
 			for(int j=0; j<words.length;j++){
 				termDocMap.addTermForDoc(words[j], docId);
 			}
 			//model.appendToTrainingLog(log);
 			model.incrementCompletedSteps();
 		}
+		//System.out.println(appendString);
+		//model.appendToTrainingLog(appendString);
 		trainer.awaitFeatureExtraction();
 	}
 

@@ -58,7 +58,7 @@ configOptions: Depend on the algorithm. This includes all hyperparameters of the
 archetype: Classifier Trainer
 runType:  trainer
 debugExamples: false
-featureExtractionThreads: 4
+featureExtractionThreads: 8
 #Jersey client settings
 jerseyClient:
   #The maximum idle time for a connection

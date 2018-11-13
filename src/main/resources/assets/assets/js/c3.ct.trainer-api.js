@@ -1405,8 +1405,10 @@ function renderModels(){
 			$("#list").append("<h3>There are currently no model in this microservice. You can add one</h3>");
 		}else{
 			for (var i=0; i< json.models.length; i++){
+				
 				$("#list").append("<li><a href=\"model.html?modId="+json.models[i].id+"\">/models/"+json.models[i].id+"</a> - " +
-						"<a href=\"evaluation.html?modId="+json.models[i].id+"\">/evaluations/"+json.models[i].id+"</a></li>");
+						"<a href=\"evaluation.html?modId="+json.models[i].id+"\">/evaluations/"+json.models[i].id+
+						"</a> | Progress: "+json.models[i].progress+"</li>");
 				
 			}
 		}

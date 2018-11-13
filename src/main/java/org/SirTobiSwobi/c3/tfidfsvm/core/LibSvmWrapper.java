@@ -1,5 +1,7 @@
 package org.SirTobiSwobi.c3.tfidfsvm.core;
 
+import org.SirTobiSwobi.c3.tfidfsvm.api.TCSvmNode;
+
 import libsvm.svm;
 import libsvm.svm_model;
 import libsvm.svm_node;
@@ -74,5 +76,63 @@ public class LibSvmWrapper {
 	
 	public static double predict(svm_model categoryModel, svm_node[] vector){
 		return svm.svm_predict(categoryModel, vector);
+	}
+	
+	public static TCSvmNode[][] buildSupportVectors(svm_node[][] SV){
+		if(SV==null){
+			return null;
+		}
+		TCSvmNode[][] TCsvmNode = new TCSvmNode[SV.length][];
+		for(int i=0;i<SV.length;i++){
+				TCsvmNode[i] = new TCSvmNode[SV[i].length];
+			for(int j=0; j<SV[i].length;j++){
+				TCsvmNode[i][j]=new TCSvmNode(SV[i][j].index,SV[i][j].value);
+			}
+		}
+		
+		return TCsvmNode;
+	}
+	
+	public static svm_node[][] buildSupportVectors(TCSvmNode[][] SV){
+		svm_node[][] svmNode = new svm_node[SV.length][];
+		for(int i=0;i<SV.length;i++){
+			svmNode[i] = new svm_node[SV[i].length];
+			for(int j=0; j<SV[i].length; j++){
+				svmNode[i][j] = new svm_node();
+				svmNode[i][j].index = SV[i][j].getIndex();
+				svmNode[i][j].value = SV[i][j].getValue();
+			}
+		}
+		return svmNode;
+	}
+	
+	public static final String svm_type_table[] =
+		{
+			"c_svc","nu_svc","one_class","epsilon_svr","nu_svr",
+		};
+
+	public	static final String kernel_type_table[]=
+		{
+			"linear","polynomial","rbf","sigmoid","precomputed"
+		};
+	
+	public static int getIdForSvmType(String type){
+		int id=0;
+		for(int i=0;i<svm_type_table.length;i++){
+			if(type.equals(svm_type_table[i])){
+				id=i;
+			}
+		}
+		return id;
+	}
+	
+	public static int getIdForKernelType(String type){
+		int id=0;
+		for(int i=0;i<kernel_type_table.length;i++){
+			if(type.equals(kernel_type_table[i])){
+				id=i;
+			}
+		}
+		return id;
 	}
 }
