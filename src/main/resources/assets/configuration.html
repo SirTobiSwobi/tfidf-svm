@@ -90,6 +90,65 @@
 													<label for="topTermsPerCat">Top Terms per Category:</label>
 													<input type="text" name="topTermsPerCat" id="topTermsPerCat" placeholder="Default is 10" />
 												</div>
+												<div class="field half">
+													<label for="svm_type">SVM type:</label>
+													<select name="svm_type" id="svm_type">
+														<option value="c_svc" selected>c_svc</option>
+														<option value="nu_svc">nu_svc</option>
+													</select>
+												</div>
+												<div class="field half">
+													<label for="kernel_type">Kernel type:</label>
+													<select name="kernel_type" id="kernel_type">
+														<option value="linear" selected>Linear</option>
+														<option value="polynomial">Polynomial</option>
+														<option value="rbf" selected>RBF</option>
+														<option value="sigmoid">Sigmoid</option>
+														<option value="precomputed">Precomputed</option>
+													</select>
+												</div>
+												<div class="field half">
+													<label for="degree">Degree:</label>
+													<input type="text" name="degree" id="degree" placeholder="Default is 3" />
+												</div>
+												<div class="field half">
+													<label for="gamma">Gamma:</label>
+													<input type="text" name="gamma" id="gamma" placeholder="Default is 1/|word embedding dimensions|. E.g. 0.005 for 200-d" />
+												</div>
+												<div class="field half">
+													<label for="coef0">Coef0:</label>
+													<input type="text" name="coef0" id="coef0" placeholder="Default is 0" />
+												</div>
+												<div class="field half">
+													<label for="eps">EPS (Stopping criteria):</label>
+													<input type="text" name="eps" id="eps" placeholder="Default is 0.001" />
+												</div>
+												<div class="field half">
+													<label for="c">C (cost):</label>
+													<input type="text" name="c" id="c" placeholder="Default is 1" />
+												</div>
+												<div class="field half">
+													<label for="nu">Nu:</label>
+													<input type="text" name="nu" id="nu" placeholder="Default is 0.5" />
+												</div>
+												<div class="field half">
+													<label for="p">P (epsilon):</label>
+													<input type="text" name="p" id="p" placeholder="Default is 0.001" />
+												</div>
+												<div class="field half">
+													<label for="shrinking">Shrinking:</label>
+													<select name="shrinking" id="shrinking">
+														<option value="0">0: Don't use shrinking heuristic</option>
+														<option value="1" selected>1: Use shrinking heuristic</option>
+													</select>
+												</div>
+												<div class="field half">
+													<label for="probability_estimates">Probability estimates:</label>
+													<select name="probability_estimates" id="probability_estimates">
+														<option value="0" selected>0: Don't train for probability estimates</option>
+														<option value="1">1: Train for probability estimates</option>
+													</select>
+												</div>
 												<ul class="actions">
 													<li><input type="submit" value="Upload configuration" class="primary" /></li>
 													<li><input type="reset" value="Clear" /></li>
@@ -118,6 +177,29 @@
 													while balancing precision and recall.</li>
 													<li>Top Terms per Category: This parameter defines how many terms are added to the controlled vocabulary. The decision to add a document 
 													to the controlled vocabulary is based on the terms with the top tfidf values for documents in the category. </li>
+													<li>SVM type: The underlying classifier implements the LibSVM library (<a href="https://www.csie.ntu.edu.tw/~cjlin/libsvm/">official website</a>). 
+												 	In regards of text classification, two of the multiple SVM modes supported by the library can be used. SVM stands for Support Vector Machine.
+													 <a href="https://en.wikipedia.org/wiki/Support_vector_machine">https://en.wikipedia.org/wiki/Support_vector_machine</a>. It uses hyperplanes 
+													 to separate data points into belonging to a certain category or not. It allows for exception points that can be on the wrong side of the hyperplane.
+													 C, and nu are regularisation parameters. They are used to implement the penalty for misclassifications during leraning. The penalty for c_svm can 
+													 be between 0 and infinity. The penalty for nu_svm can be between 0 and 1. The default selection is c_svm</li>
+													 <li>Kernel type, degree, gamma and coef0: SVMs use kernels. These are mathematical formulas to map existing vectors into higher-dimensional space. 
+													 This is done to easier separate datapoints from each other. The values for degree, gamma and coef0 are used in the kernel formulae. Their default 
+													 values are:
+													 <ul>
+													 	<li>Degree: 3</li>
+													 	<li>Gamma: 1/k. Here k is the dimensionality of data points. For word embeddings it's the dimensions of the used word embedding </li>
+													 	<li>coef0: Default is 0.</li>
+													 	<li>SIGMOID: tanh(gamma*u'*v + coef0)</li>
+													 </ul>
+													 The formuale are:
+													 <ul>
+													 	<li>Linear: u'*v</li>
+													 	<li>Poly: (gamma*u'*v + coef0)^degree</li>
+													 	<li>RBF: exp(-gamma*|u-v|^2) This is the default!</li>
+													 	<li>SIGMOID: tanh(gamma*u'*v + coef0)</li>
+													 </ul>
+													 </li>
 												</ul>
 										</div>
 									</div>

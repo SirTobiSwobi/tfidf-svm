@@ -376,7 +376,7 @@
 			var form = $("#createF").serializeArray();
 			//console.log(form);
 			createConfiguration(form);
-			location.reload(true);
+			//location.reload(true);
 		});
 		
 		$("#uploadF").submit(function( event ) {

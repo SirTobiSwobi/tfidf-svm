@@ -1230,6 +1230,7 @@ $.getJSON("../configurations/"+confId,function(json){
 		$("#list").append("<li>Assignment Threshold: "+json.assignmentThreshold+"</li>");
 		$("#list").append("<li>Selection Policy: "+json.selectionPolicy+"</li>");
 		$("#list").append("<li>Top Terms per Category: "+json.topTermsPerCat+"</li>");
+		$("#list").append("<li>SVM Parameters: "+JSON.stringify(json.svmParameter)+"</li>");
 		$("#list").append("</ul>");
 	}
 });
@@ -1242,7 +1243,20 @@ function createConfiguration(form){
 				", \"assignmentThreshold\":"+form[3].value+
 				", \"selectionPolicy\": \""+form[4].value+"\""+
 				", \"topTermsPerCat\":"+form[5].value+
-				" }]}";
+				", \"svmParameter\": {"+
+				"  \"svm_type\": \""+form[6].value+"\""+
+				", \"kernel_type\": \""+form[7].value+"\""+
+				", \"degree\":"+form[8].value+
+				", \"gamma\":"+form[9].value+
+				", \"coef0\":"+form[10].value+
+				", \"eps\":"+form[11].value+
+				", \"nr_weight\": 0, \"weight_label\": null, \"weight\": null"+
+				", \"c\":"+form[12].value+
+				", \"nu\":"+form[13].value+
+				", \"p\":"+form[14].value+
+				", \"shrinking\":"+form[15].value+
+				", \"probability_estimates\":"+form[16].value+
+				" }}]}";
 	console.log(json);
 	
 	var url="../configurations";
@@ -1270,7 +1284,20 @@ function updateConfiguration(form){
 				", \"assignmentThreshold\":"+form[3].value+
 				", \"selectionPolicy\": \""+form[4].value+"\""+
 				", \"topTermsPerCat\":"+form[5].value+
-				" }";
+				", \"svmParameter\": {"+
+				"  \"svm_type\": \""+form[6].value+"\""+
+				", \"kernel_type\": \""+form[7].value+"\""+
+				", \"degree\":"+form[8].value+
+				", \"gamma\":"+form[9].value+
+				", \"coef0\":"+form[10].value+
+				", \"eps\":"+form[11].value+
+				", \"nr_weight\": 0, \"weight_label\": null, \"weight\": null"+
+				", \"c\":"+form[12].value+
+				", \"nu\":"+form[13].value+
+				", \"p\":"+form[14].value+
+				", \"shrinking\":"+form[15].value+
+				", \"probability_estimates\":"+form[16].value+
+				"} }";
 	console.log(json);
 	
 	var url="../configurations/"+form[0].value;
@@ -1339,6 +1366,69 @@ function renderConfigurationUpdate(confId){
 				$("#selectionPolicy").append("<option value=\"MacroaverageRecall\">Macroaverage Recall</option>");
 			}
 			$("#topTermsPerCat").val(json.topTermsPerCat);
+			$("#svm_type").empty
+			if(json.svmParameter.svm_type=="c_svc"){
+				$("#svm_type").append("<option value=\"c_svc\" selected>c_svc</option>");
+				$("#svm_type").append("<option value=\"nu_svc\">nu_svc</option>");
+			}else{
+				$("#svm_type").append("<option value=\"c_svc\">c_svc</option>");
+				$("#svm_type").append("<option value=\"nu_svc\" selected>nu_svc</option>");
+			}
+			$("#kernel_type").empty();
+			if(json.svmParameter.kernel_type=="linear"){
+				$("#kernel_type").append("<option value=\"linear\" selected>Linear</option>");
+				$("#kernel_type").append("<option value=\"polynomial\">Polynomial</option>");
+				$("#kernel_type").append("<option value=\"rbf\">RBF</option>");
+				$("#kernel_type").append("<option value=\"sigmoid\">Sigmoid</option>");
+				$("#kernel_type").append("<option value=\"precomputed\">Precomputed</option>");
+			}else if(json.svmParameter.kernel_type=="polynomial"){
+				$("#kernel_type").append("<option value=\"linear\">Linear</option>");
+				$("#kernel_type").append("<option value=\"polynomial\" selected>Polynomial</option>");
+				$("#kernel_type").append("<option value=\"rbf\">RBF</option>");
+				$("#kernel_type").append("<option value=\"sigmoid\">Sigmoid</option>");
+				$("#kernel_type").append("<option value=\"precomputed\">Precomputed</option>");
+			}else if(json.svmParameter.kernel_type=="rbf"){
+				$("#kernel_type").append("<option value=\"linear\">Linear</option>");
+				$("#kernel_type").append("<option value=\"polynomial\">Polynomial</option>");
+				$("#kernel_type").append("<option value=\"rbf\" selected>RBF</option>");
+				$("#kernel_type").append("<option value=\"sigmoid\">Sigmoid</option>");
+				$("#kernel_type").append("<option value=\"precomputed\">Precomputed</option>");
+			}else if(json.svmParameter.kernel_type=="sigmoid"){
+				$("#kernel_type").append("<option value=\"linear\">Linear</option>");
+				$("#kernel_type").append("<option value=\"polynomial\">Polynomial</option>");
+				$("#kernel_type").append("<option value=\"rbf\">RBF</option>");
+				$("#kernel_type").append("<option value=\"sigmoid\" selected>Sigmoid</option>");
+				$("#kernel_type").append("<option value=\"precomputed\">Precomputed</option>");
+			}else if(json.svmParameter.kernel_type=="precomputed"){
+				$("#kernel_type").append("<option value=\"linear\">Linear</option>");
+				$("#kernel_type").append("<option value=\"polynomial\">Polynomial</option>");
+				$("#kernel_type").append("<option value=\"rbf\">RBF</option>");
+				$("#kernel_type").append("<option value=\"sigmoid\">Sigmoid</option>");
+				$("#kernel_type").append("<option value=\"precomputed\" precomputed>Precomputed</option>");
+			}
+			$("#degree").val(json.svmParameter.degree);
+			$("#gamma").val(json.svmParameter.gamma);
+			$("#coef0").val(json.svmParameter.coef0);
+			$("#eps").val(json.svmParameter.eps);
+			$("#c").val(json.svmParameter.c);
+			$("#nu").val(json.svmParameter.nu);
+			$("#p").val(json.svmParameter.p);
+			$("#shrinking").empty();
+			if(json.svmParameter.shrinking=="0"){
+				$("#shrinking").append("<option value=\"0\" selected>0: Don't use shrinking heuristic</option>");
+				$("#shrinking").append("<option value=\"1\">1: Use shrinking heuristic</option>");
+			}else{
+				$("#shrinking").append("<option value=\"0\">0: Don't use shrinking heuristic</option>");
+				$("#shrinking").append("<option value=\"1\" selected>1: Use shrinking heuristic</option>");
+			}
+			$("#probability_estimates").empty();
+			if(json.svmParameter.probability_estimates=="0"){
+				$("#probability_estimates").append("<option value=\"0\" selected>0: Don't train for probability estimates</option>");
+				$("#probability_estimates").append("<option value=\"1\">1: Train for probability estimates</option>");
+			}else{
+				$("#probability_estimates").append("<option value=\"0\">0: Don't train for probability estimates</option>");
+				$("#probability_estimates").append("<option value=\"1\" selected>1: Train for probability estimates</option>");
+			}
 		}
 	});
 }

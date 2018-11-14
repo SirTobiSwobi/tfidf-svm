@@ -16,3 +16,4 @@ Version change log:
 - 0.1.0: updated /model and /models endpoints to accomodate the libsvm model
 - 0.1.1: updated web GUI
 - 1.0.0: finished /classification endpoint and fixed /model endpoint
+- 1.0.1: fixed configuration GUI

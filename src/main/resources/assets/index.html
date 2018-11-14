@@ -51,8 +51,10 @@
 								<h1>TFIDF SVM Classifier</h1>
 							</header>
 							<div class="content">
-								<p>This microservice implements an TFIDF based feature extraction system. It is a trainer as well as an athlete producing controlled vocabularies and 
-								term documenty frequencies as part of its model. Only terms that have high tfidf values for each category are added to the controlled vocabulary.</p>
+								<p>This microservice implements an TFIDF based feature extraction system coupled with a libsvm based classifier. It is a trainer as well as an athlete
+								 producing controlled vocabularies and term documenty frequencies as part of its model. Only terms that have high tfidf values for each category are added 
+								 to the controlled vocabulary.  Based on this vocabulary, support vectors are computed and also 
+								 stored within the model.</p>
 								<ul class="actions">
 									<li><a href="#one" class="button next scrolly">Get Started</a></li>
 								</ul>
@@ -121,7 +123,7 @@
 										<img src="images/pic06.jpg" alt="" />
 									</span>
 									<header class="major">
-										<h3><a href="configurations.html" class="link">/configuration</a></h3>
+										<h3><a href="configurations.html" class="link">/configurations</a></h3>
 										<p>Depending on the utilized machine learning algorithm, different hyper-parameters for the learning algorithm can be specified.
 										This happens using this API endpoint.</p>
 									</header>
