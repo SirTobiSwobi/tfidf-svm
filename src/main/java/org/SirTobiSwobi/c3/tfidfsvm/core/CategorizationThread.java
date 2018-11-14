@@ -5,6 +5,9 @@ import org.SirTobiSwobi.c3.tfidfsvm.db.Document;
 import org.SirTobiSwobi.c3.tfidfsvm.db.ReferenceHub;
 import org.SirTobiSwobi.c3.tfidfsvm.db.SearchDirection;
 
+import libsvm.svm;
+import libsvm.svm_node;
+
 public class CategorizationThread extends Thread {
 	private ReferenceHub refHub;
 	private Document document;
@@ -27,35 +30,23 @@ public class CategorizationThread extends Thread {
 	 */
 	private void performCategorization(){
 		TfidfFeatureExtractor fe=new TfidfFeatureExtractor(refHub);
-		double[] vector = fe.getVector(document.getId());
+		double[] features = fe.getDimensionNormalizedVector(document.getId());
+		
 		String featureString="Doc: "+document.getId();
-		for(int i=0;i<vector.length;i++){
-			featureString+="("+i+", "+vector[i]+") ";
+		for(int i=0;i<features.length;i++){
+			featureString+="("+i+", "+features[i]+") ";
 		}
 		//System.out.println(featureString);	//used for debugging within the log
 		featureString="Doc: "+document.getId();
-		for(int i=0;i<vector.length;i++){
-			featureString+="("+i+", "+Utilities.normalizeVector(vector)[i]+") ";
+		for(int i=0;i<features.length;i++){
+			featureString+="("+i+", "+Utilities.normalizeVector(features)[i]+") ";
 		}
 		//System.out.println(featureString);	//used for debugging within the log
-		Category[] categories = refHub.getCategoryManager().getCategoryArray();
-		for(int i=0;i<categories.length;i++){
-			if(categories[i].getId()%2==document.getId()%2){ //if both, the document and the category ID are odd or even.
-				if(!refHub.getCategorizationManager().containsCategorizationOf(document.getId(), categories[i].getId())){ //only assign if not already there
-					refHub.getCategorizationManager().addCategorizationWithoutId(document.getId(), categories[i].getId(), 0.8);
-				}
-				
-				if(refHub.getActiveModel().getConfiguration().isIncludeImplicits()){ //if implicits are to be assigned
-					long[] implicitCategorizations=refHub.getTargetFunctionManager().findAllImplicitCatIds(categories[i].getId(), SearchDirection.Ascending);
-					if(implicitCategorizations!=null){
-						for(int k=0; k<implicitCategorizations.length; k++){
-							if(!refHub.getCategorizationManager().containsCategorizationOf(document.getId(), implicitCategorizations[k])){
-								refHub.getCategorizationManager().addCategorizationWithoutId(document.getId(), implicitCategorizations[k], 0.8);
-							}
-						}
-					}
-				}
-			}
-		}
+		svm_node[] vector = LibSvmWrapper.buildSvmNodes(features);
+		double prediction = svm.svm_predict(refHub.getActiveModel().getSvmModel(), vector);
+		//System.out.println("Prediction: "+prediction);
+		refHub.getCategorizationManager().addCategorizationWithoutId(document.getId(), (long)prediction, 1.0);
+		
+		
 	}
 }

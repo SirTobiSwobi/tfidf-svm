@@ -43,6 +43,7 @@ import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.client.JerseyClientBuilder;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import libsvm.svm_parameter;
 
 public class TfidfSvmApplication extends Application<TfidfSvmConfiguration> {
 
@@ -154,7 +155,21 @@ public class TfidfSvmApplication extends Application<TfidfSvmConfiguration> {
 		environment.jersey().register(categorizations);
 		environment.jersey().register(retraining);
 		
-		Configuration cfgn = new Configuration(1,3, true, 0.5,SelectionPolicy.MicroaverageF1, 20);
+		svm_parameter param = new svm_parameter();
+		
+		param.svm_type = svm_parameter.C_SVC;
+		//param.kernel_type = svm_parameter.RBF;
+		param.kernel_type = svm_parameter.LINEAR;
+		param.coef0 = 0;
+		param.nu = 0.5;
+		param.cache_size = 100;
+		param.C = 1;
+		param.eps = 1e-3;
+		param.p = 0.1;
+		param.shrinking = 1;
+		param.probability = 0;
+		
+		Configuration cfgn = new Configuration(1,3, true, 0.5,SelectionPolicy.MicroaverageF1, 20, param);
 		confMan.setConfiguration(cfgn);
 		
 		
@@ -219,12 +234,6 @@ public class TfidfSvmApplication extends Application<TfidfSvmConfiguration> {
 			tfMan.setAssignment(4, 4, 525);
 			
 		
-			cfgn = new Configuration(1,2, true, 0.5,SelectionPolicy.MicroaverageF1, 5);
-			confMan.setConfiguration(cfgn);
-			cfgn = new Configuration(3,3, true, 0.6,SelectionPolicy.MacroaverageF1, 10);
-			confMan.setConfiguration(cfgn);
-			cfgn = new Configuration(5,5, true, 0.4,SelectionPolicy.MicroaverageRecall, 15);
-			confMan.setConfiguration(cfgn);
 		}
 	
 		

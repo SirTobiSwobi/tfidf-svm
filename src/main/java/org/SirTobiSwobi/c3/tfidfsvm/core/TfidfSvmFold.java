@@ -39,12 +39,12 @@ public class TfidfSvmFold extends Fold {
 		String appendString="";
 		
 		TfidfFeatureExtractor fe = new TfidfFeatureExtractor(refHub, model);
-		
+		/*
 		svm_parameter param = new svm_parameter();
+		
 		param.svm_type = svm_parameter.C_SVC;
 		//param.kernel_type = svm_parameter.RBF;
 		param.kernel_type = svm_parameter.LINEAR;
-		param.gamma = 1.0/(double)model.getControlledVocabulary().length;
 		param.coef0 = 0;
 		param.nu = 0.5;
 		param.cache_size = 100;
@@ -53,6 +53,9 @@ public class TfidfSvmFold extends Fold {
 		param.p = 0.1;
 		param.shrinking = 1;
 		param.probability = 0;
+		*/
+		svm_parameter param = config.getSvmParameter();
+		param.gamma = 1.0/(double)model.getControlledVocabulary().length;
 		//param.nr_weight = 0;
 		/*
 		 * Computing weight labels based on relative assignment amount

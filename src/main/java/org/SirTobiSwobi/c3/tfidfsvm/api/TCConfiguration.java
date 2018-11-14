@@ -10,10 +10,11 @@ public class TCConfiguration {
 	private double assignmentThreshold;
 	private String selectionPolicy;
 	private int topTermsPerCat;
+	private TCSvmParameter svmParameter;
 	
 
 	public TCConfiguration(long id, int folds, boolean includeImplicits, double assignmentThreshold,
-			String selectionPolicy, int topTermsPerCat) {
+			String selectionPolicy, int topTermsPerCat, TCSvmParameter svmParameter) {
 		super();
 		this.id = id;
 		this.folds = folds;
@@ -21,6 +22,7 @@ public class TCConfiguration {
 		this.assignmentThreshold = assignmentThreshold;
 		this.selectionPolicy = selectionPolicy;
 		this.topTermsPerCat = topTermsPerCat;
+		this.svmParameter = svmParameter;
 	}
 
 
@@ -58,6 +60,12 @@ public class TCConfiguration {
 	public int getTopTermsPerCat() {
 		return topTermsPerCat;
 	}
+
+	@JsonProperty
+	public TCSvmParameter getSvmParameter() {
+		return svmParameter;
+	}
+	
 	
 	
 }

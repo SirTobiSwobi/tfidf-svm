@@ -15,10 +15,14 @@ import javax.ws.rs.core.Response;
 import org.SirTobiSwobi.c3.tfidfsvm.api.TCConfiguration;
 import org.SirTobiSwobi.c3.tfidfsvm.api.TCConfigurations;
 import org.SirTobiSwobi.c3.tfidfsvm.api.TCHash;
+import org.SirTobiSwobi.c3.tfidfsvm.api.TCSvmParameter;
+import org.SirTobiSwobi.c3.tfidfsvm.core.LibSvmWrapper;
 import org.SirTobiSwobi.c3.tfidfsvm.db.Configuration;
 import org.SirTobiSwobi.c3.tfidfsvm.db.ConfigurationManager;
 import org.SirTobiSwobi.c3.tfidfsvm.db.ReferenceHub;
 import org.SirTobiSwobi.c3.tfidfsvm.db.SelectionPolicy;
+
+import libsvm.svm_parameter;
 
 @Path("/configurations")
 @Produces(MediaType.APPLICATION_JSON)
@@ -55,13 +59,15 @@ public class ConfigurationsResource {
 					selectionPolicy="MacroaverageRecall";
 				}
 				
+				TCSvmParameter param = LibSvmWrapper.buildTcSvmParameter(confArray[i].getSvmParameter());
+				
 				outputArray[i]=new TCConfiguration(confArray[i].getId(),
 						confArray[i].getFolds(),
 						confArray[i].isIncludeImplicits(), 
 						confArray[i].getAssignmentThreshold(),
 						selectionPolicy,
-						confArray[i].getTopTermsPerCat()
-						);
+						confArray[i].getTopTermsPerCat(),
+						param);
 			}
 			TCConfigurations output = new TCConfigurations(outputArray);
 			return Response.ok(output).build();
@@ -92,12 +98,26 @@ public class ConfigurationsResource {
 				}else if(conf.getSelectionPolicy().equals("MacroaverageRecall")){
 					selectionPolicy=SelectionPolicy.MacroaverageRecall;
 				}
+				svm_parameter svmParam = new svm_parameter();
+				svmParam.C = conf.getSvmParameter().getC();
+				svmParam.coef0 = conf.getSvmParameter().getCoef0();
+				svmParam.degree = conf.getSvmParameter().getDegree();
+				svmParam.gamma = conf.getSvmParameter().getGamma();
+				svmParam.kernel_type = LibSvmWrapper.getIdForKernelType(conf.getSvmParameter().getKernel_type());
+				svmParam.nu = conf.getSvmParameter().getNu();
+				svmParam.p = conf.getSvmParameter().getP();
+				svmParam.probability = conf.getSvmParameter().getProbability_estimates();
+				svmParam.shrinking = conf.getSvmParameter().getShrinking();
+				svmParam.svm_type = LibSvmWrapper.getIdForSvmType(conf.getSvmParameter().getSvm_type());
 				if(conf.getId()>=0){
 					
-					Configuration config = new Configuration(conf.getId(), conf.getFolds(), conf.isIncludeImplicits(), conf.getAssignmentThreshold(),selectionPolicy, conf.getTopTermsPerCat());
+					
+					Configuration config = new Configuration(conf.getId(), conf.getFolds(), conf.isIncludeImplicits(), conf.getAssignmentThreshold(),selectionPolicy,
+							conf.getTopTermsPerCat(), svmParam);
 					refHub.getConfigurationManager().setConfiguration(config);
 				}else{			
-					refHub.getConfigurationManager().addConfigurationWithoutId(conf.getFolds(), conf.isIncludeImplicits(), conf.getAssignmentThreshold(), selectionPolicy, conf.getTopTermsPerCat());
+					refHub.getConfigurationManager().addConfigurationWithoutId(conf.getFolds(), conf.isIncludeImplicits(), conf.getAssignmentThreshold(), selectionPolicy,
+							conf.getTopTermsPerCat(), svmParam);
 				}
 			}
 		}

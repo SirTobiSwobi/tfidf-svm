@@ -1,5 +1,7 @@
 package org.SirTobiSwobi.c3.tfidfsvm.db;
 
+import libsvm.svm_parameter;
+
 /**
  * This class is meant to be extended in each classifier trainer implementation
  * @author Tobias Eljasik-Swoboda
@@ -13,6 +15,7 @@ public class Configuration {
 	private double assignmentThreshold;
 	private SelectionPolicy selectionPolicy;
 	private int topTermsPerCat;
+	private svm_parameter svmParameter;
 
 	
 	public Configuration(long id) {
@@ -33,7 +36,7 @@ public class Configuration {
 	
 
 	public Configuration(long id, int folds, boolean includeImplicits, double assignmentThreshold,
-			SelectionPolicy selectionPolicy, int topTermsPerCat) {
+			SelectionPolicy selectionPolicy, int topTermsPerCat, svm_parameter svmParameter) {
 		super();
 		this.id = id;
 		this.folds = folds;
@@ -41,6 +44,7 @@ public class Configuration {
 		this.assignmentThreshold = assignmentThreshold;
 		this.selectionPolicy = selectionPolicy;
 		this.topTermsPerCat = topTermsPerCat;
+		this.svmParameter = svmParameter;
 	}
 
 	public Configuration() {
@@ -97,8 +101,13 @@ public class Configuration {
 
 	public void setTopTermsPerCat(int topTermsPerCat) {
 		this.topTermsPerCat = topTermsPerCat;
-	}	
-	
-	
+	}
 
+	public svm_parameter getSvmParameter() {
+		return svmParameter;
+	}
+
+	public void setSvmParameter(svm_parameter svmParameter) {
+		this.svmParameter = svmParameter;
+	}
 }

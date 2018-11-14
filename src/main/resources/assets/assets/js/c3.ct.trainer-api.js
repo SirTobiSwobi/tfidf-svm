@@ -1483,7 +1483,7 @@ function renderModel(modId){
 	
 		$("#list").append("Id: "+json.id+"<br/>");
 		$("#list").append("Configuration Id: "+json.configurationId+"<br/>");
-		$("#list").append("Include implicits: "+json.includeImplicits+"<br/>");
+		$("#list").append("Include implicits: "+json.configuration.includeImplicits+"<br/>");
 		$("#list").append("Progress:"+json.progress+"<br/>");
 		$("#list").append("TrainingLog:<br/> "+json.trainingLog+"<br/>");
 		$("#list").append("<h4>Configuration:</h4>");
@@ -1492,6 +1492,12 @@ function renderModel(modId){
 		$("#list").append("IncludeImplicits:"+json.configuration.includeImplicits+"<br/>");
 		$("#list").append("SelectionPolicy:"+json.configuration.selectionPolicy+"<br/>");
 		$("#list").append("TopTermsPerCat:"+json.configuration.topTermsPerCat+"<br/>");
+		$("#list").append("<h4>Controlled Vocabulary:</h4>");
+		for(var i=0;i<json.controlledVocabulary.length; i++){
+			$("#list").append("id:"+json.controlledVocabulary[i].id+" term: "+json.controlledVocabulary[i].term+" documentFrequency: "+
+					json.controlledVocabulary[i].documentFrequency+" sumDimensionsSquares: "+json.controlledVocabulary[i].sumDimensionSquares+"<br/>");
+		}
+		$("#list").append("SvmModel:"+JSON.stringify(json.svmModel)+"<br/>");
 		
 	}).fail(function(){
 		$("#list").empty();
@@ -1591,7 +1597,7 @@ function renderActiveModel(){
 	
 		$("#list").append("Id: "+json.id+"<br/>");
 		$("#list").append("Configuration Id: "+json.configurationId+"<br/>");
-		$("#list").append("Include implicits: "+json.includeImplicits+"<br/>");
+		$("#list").append("Include implicits: "+json.configuration.includeImplicits+"<br/>");
 		$("#list").append("Progress:"+json.progress+"<br/>");
 		$("#list").append("TrainingLog:<br/> "+json.trainingLog+"<br/>");
 		$("#list").append("<h4>Configuration:</h4>");
@@ -1600,6 +1606,12 @@ function renderActiveModel(){
 		$("#list").append("IncludeImplicits:"+json.configuration.includeImplicits+"<br/>");
 		$("#list").append("SelectionPolicy:"+json.configuration.selectionPolicy+"<br/>");
 		$("#list").append("TopTermsPerCat:"+json.configuration.topTermsPerCat+"<br/>");
+		$("#list").append("<h4>Controlled Vocabulary:</h4>");
+		for(var i=0;i<json.controlledVocabulary.length; i++){
+			$("#list").append("id:"+json.controlledVocabulary[i].id+" term: "+json.controlledVocabulary[i].term+" documentFrequency: "+
+					json.controlledVocabulary[i].documentFrequency+" sumDimensionsSquares: "+json.controlledVocabulary[i].sumDimensionSquares+"<br/>");
+		}
+		$("#list").append("SvmModel:"+JSON.stringify(json.svmModel)+"<br/>");
 		
 	}).fail(function(){
 		$("#list").empty();

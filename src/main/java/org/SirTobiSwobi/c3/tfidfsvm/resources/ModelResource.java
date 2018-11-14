@@ -85,7 +85,7 @@ public class ModelResource {
 			selectionPolicy="MacroaverageRecall";
 		}
 		TCConfiguration configuration = new TCConfiguration(conf.getId(), conf.getFolds(), conf.isIncludeImplicits(), conf.getAssignmentThreshold(),
-				selectionPolicy, conf.getTopTermsPerCat());
+				selectionPolicy, conf.getTopTermsPerCat(), LibSvmWrapper.buildTcSvmParameter(conf.getSvmParameter()));
 		
 		TCVocabularyTripel[] controlledVocabulary = new TCVocabularyTripel[model.getControlledVocabulary().length];
 		for(int i=0;i<controlledVocabulary.length;i++){
@@ -96,22 +96,7 @@ public class ModelResource {
 		}
 		org.SirTobiSwobi.c3.tfidfsvm.api.TCSvmModel svmModel=null;
 		if(model.getSvmModel()!=null){	
-		TCSvmNode[][] SV=LibSvmWrapper.buildSupportVectors(model.getSvmModel().SV);
-		svmModel = new TCSvmModel(LibSvmWrapper.svm_type_table[model.getSvmModel().param.svm_type],
-							LibSvmWrapper.kernel_type_table[model.getSvmModel().param.kernel_type],
-							model.getSvmModel().param.degree, 
-							model.getSvmModel().param.gamma,
-							model.getSvmModel().param.coef0,
-							model.getSvmModel().nr_class,
-							model.getSvmModel().l, 
-							model.getSvmModel().rho,
-							model.getSvmModel().label, 
-							model.getSvmModel().probA, 
-							model.getSvmModel().probB, 
-							model.getSvmModel().nSV, 
-							model.getSvmModel().sv_coef,
-							SV
-				);
+		svmModel=LibSvmWrapper.buildTcSvmModel(model.getSvmModel());
 		}
 		TCModel output = new TCModel(model.getId(), model.getConfiguration().getId(), model.getProgress(), model.getTrainingLog(), configuration, controlledVocabulary, model.getTrainingSetSize(), svmModel);
 		return output;

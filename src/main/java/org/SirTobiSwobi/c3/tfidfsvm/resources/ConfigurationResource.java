@@ -13,11 +13,15 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.SirTobiSwobi.c3.tfidfsvm.api.TCConfiguration;
+import org.SirTobiSwobi.c3.tfidfsvm.api.TCSvmParameter;
+import org.SirTobiSwobi.c3.tfidfsvm.core.LibSvmWrapper;
 import org.SirTobiSwobi.c3.tfidfsvm.db.Configuration;
 import org.SirTobiSwobi.c3.tfidfsvm.db.ReferenceHub;
 import org.SirTobiSwobi.c3.tfidfsvm.db.SelectionPolicy;
 
 import com.codahale.metrics.annotation.Timed;
+
+import libsvm.svm_parameter;
 
 @Path("/configurations/{conf}")
 @Produces(MediaType.APPLICATION_JSON)
@@ -51,14 +55,15 @@ public class ConfigurationResource {
 		}else if(configuration.getSelectionPolicy()==SelectionPolicy.MacroaverageRecall){
 			selectionPolicy="MacroaverageRecall";
 		}
+		TCSvmParameter svmParam = LibSvmWrapper.buildTcSvmParameter(configuration.getSvmParameter());
 		TCConfiguration output = new TCConfiguration(
 						configuration.getId(),
 						configuration.getFolds(),
 						configuration.isIncludeImplicits(), 
 						configuration.getAssignmentThreshold(),
 						selectionPolicy,
-						configuration.getTopTermsPerCat()
-						);	
+						configuration.getTopTermsPerCat(), 
+						svmParam);	
 		return Response.ok(output).build();
 		
 	}
@@ -84,13 +89,27 @@ public class ConfigurationResource {
 			selectionPolicy=SelectionPolicy.MacroaverageRecall;
 		}
 		
+		svm_parameter svmParam = new svm_parameter();
+		svmParam.C = configuration.getSvmParameter().getC();
+		svmParam.coef0 = configuration.getSvmParameter().getCoef0();
+		svmParam.degree = configuration.getSvmParameter().getDegree();
+		svmParam.gamma = configuration.getSvmParameter().getGamma();
+		svmParam.kernel_type = LibSvmWrapper.getIdForKernelType(configuration.getSvmParameter().getKernel_type());
+		svmParam.nu = configuration.getSvmParameter().getNu();
+		svmParam.p = configuration.getSvmParameter().getP();
+		svmParam.probability = configuration.getSvmParameter().getProbability_estimates();
+		svmParam.shrinking = configuration.getSvmParameter().getShrinking();
+		svmParam.svm_type = LibSvmWrapper.getIdForSvmType(configuration.getSvmParameter().getSvm_type());
+		
+		
 		refHub.getConfigurationManager().setConfiguration(
 				new Configuration(configuration.getId(),
 								configuration.getFolds(),
 								configuration.isIncludeImplicits(),
 								configuration.getAssignmentThreshold(),
 								selectionPolicy,
-								configuration.getTopTermsPerCat()));
+								configuration.getTopTermsPerCat(),
+								svmParam));
 		Response response = Response.ok().build();
 		return response;
 	}

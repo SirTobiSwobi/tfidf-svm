@@ -1,6 +1,8 @@
 package org.SirTobiSwobi.c3.tfidfsvm.core;
 
+import org.SirTobiSwobi.c3.tfidfsvm.api.TCSvmModel;
 import org.SirTobiSwobi.c3.tfidfsvm.api.TCSvmNode;
+import org.SirTobiSwobi.c3.tfidfsvm.api.TCSvmParameter;
 
 import libsvm.svm;
 import libsvm.svm_model;
@@ -134,5 +136,77 @@ public class LibSvmWrapper {
 			}
 		}
 		return id;
+	}
+	
+	public static svm_parameter buildSvmParameter(TCSvmParameter tcParam){
+		svm_parameter param = new svm_parameter();
+		param.svm_type=getIdForSvmType(tcParam.getSvm_type());
+		param.kernel_type=getIdForKernelType(tcParam.getKernel_type());
+		param.degree=tcParam.getDegree();
+		param.gamma=tcParam.getGamma();
+		param.coef0=tcParam.getCoef0();
+		param.cache_size=tcParam.getCache_size();
+		param.eps=tcParam.getEps();
+		param.C=tcParam.getC();
+		param.nr_weight=tcParam.getNr_weight();
+		param.weight_label=tcParam.getWeight_label();
+		param.weight=tcParam.getWeight();
+		param.nu=tcParam.getNu();
+		param.p=tcParam.getP();
+		param.shrinking=tcParam.getShrinking();
+		param.probability=tcParam.getProbability_estimates();
+		return param;
+	}
+	
+	public static TCSvmParameter buildTcSvmParameter(svm_parameter param){
+		TCSvmParameter tcParam = new TCSvmParameter(svm_type_table[param.svm_type],
+				kernel_type_table[param.kernel_type],
+				param.degree,
+				param.gamma,
+				param.coef0,
+				param.cache_size,
+				param.eps,
+				param.nr_weight,
+				param.weight_label,
+				param.weight,
+				param.C,
+				param.nu,
+				param.p,
+				param.shrinking,
+				param.probability
+				);	
+		return tcParam;
+	}
+	
+	public static svm_model buildSvmModel(TCSvmModel tcModel){
+		svm_model model = new svm_model();
+		svm_parameter param = buildSvmParameter(tcModel.getParam());
+		model.param = param;
+		model.nr_class = tcModel.getNr_class();
+		model.l = tcModel.getTotal_sv();
+		model.SV = buildSupportVectors(tcModel.getSvm_node());
+		model.sv_coef = tcModel.getSv_coef();
+		model.rho = tcModel.getRho();
+		model.probA = tcModel.getProbA();
+		model.probB = tcModel.getProbB();
+		model.label = tcModel.getLabel();
+		model.nSV = tcModel.getNr_sv();
+		return model;
+	}
+	
+	public static TCSvmModel buildTcSvmModel(svm_model model){
+		TCSvmParameter tcParam = buildTcSvmParameter(model.param);
+		TCSvmModel tcModel = new TCSvmModel(tcParam,
+				model.nr_class, 
+				model.l,
+				model.rho,
+				model.label,
+				model.probA,
+				model.probB,
+				model.nSV,
+				model.sv_coef,
+				buildSupportVectors(model.SV)
+				);	
+		return tcModel;
 	}
 }

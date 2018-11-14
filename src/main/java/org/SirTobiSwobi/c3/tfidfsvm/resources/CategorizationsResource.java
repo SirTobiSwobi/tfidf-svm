@@ -109,6 +109,7 @@ public class CategorizationsResource {
 			}
 			
 		}
+		
 		classifier.categorizeDocument(docId);
 		TCProgress progress = new TCProgress(docId,"/categorizations/documents/"+docId,0.0);
 		//URI location = UriBuilder.fromPath("/documents").build();
