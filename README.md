@@ -17,3 +17,4 @@ Version change log:
 - 0.1.1: updated web GUI
 - 1.0.0: finished /classification endpoint and fixed /model endpoint
 - 1.0.1: fixed configuration GUI
+- 1.0.2: fixed bug in /configurations/x

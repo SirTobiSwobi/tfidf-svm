@@ -98,6 +98,7 @@ public class ConfigurationsResource {
 				}else if(conf.getSelectionPolicy().equals("MacroaverageRecall")){
 					selectionPolicy=SelectionPolicy.MacroaverageRecall;
 				}
+				/*
 				svm_parameter svmParam = new svm_parameter();
 				svmParam.C = conf.getSvmParameter().getC();
 				svmParam.coef0 = conf.getSvmParameter().getCoef0();
@@ -109,6 +110,8 @@ public class ConfigurationsResource {
 				svmParam.probability = conf.getSvmParameter().getProbability_estimates();
 				svmParam.shrinking = conf.getSvmParameter().getShrinking();
 				svmParam.svm_type = LibSvmWrapper.getIdForSvmType(conf.getSvmParameter().getSvm_type());
+				*/
+				svm_parameter svmParam = LibSvmWrapper.buildSvmParameter(conf.getSvmParameter());
 				if(conf.getId()>=0){
 					
 					

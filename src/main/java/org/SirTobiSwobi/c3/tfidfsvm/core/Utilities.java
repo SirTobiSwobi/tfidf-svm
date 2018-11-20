@@ -3,6 +3,7 @@ package org.SirTobiSwobi.c3.tfidfsvm.core;
 import java.util.ArrayList;
 
 import org.SirTobiSwobi.c3.tfidfsvm.db.Assignment;
+import org.SirTobiSwobi.c3.tfidfsvm.db.Document;
 
 public class Utilities {
 	
