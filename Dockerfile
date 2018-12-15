@@ -1,5 +1,5 @@
 FROM java
-ENV version=1.0.2
+ENV version=1.1.0
 MAINTAINER Tobias Eljasik-Swoboda ${version}
 EXPOSE 8080/tcp
 EXPOSE 8081/tcp

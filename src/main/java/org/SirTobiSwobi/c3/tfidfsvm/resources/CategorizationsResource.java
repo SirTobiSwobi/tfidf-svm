@@ -45,7 +45,7 @@ public class CategorizationsResource {
 		TCCategorization[] TCcategorizations = new TCCategorization[categorizations.length];
 		for(int i=0; i<categorizations.length; i++){
 			TCcategorizations[i] = new TCCategorization(categorizations[i].getId(), categorizations[i].getDocumentId(), 
-								categorizations[i].getCategoryId(), categorizations[i].getProbability());
+								categorizations[i].getCategoryId(), categorizations[i].getProbability(), categorizations[i].getExplanation());
 		}
 		TCCategorizations output = new TCCategorizations(TCcategorizations);
 		
@@ -62,7 +62,7 @@ public class CategorizationsResource {
 		TCCategorization[] TCcategorizations = new TCCategorization[categorizations.length];
 		for(int i=0; i<categorizations.length; i++){
 			TCcategorizations[i] = new TCCategorization(categorizations[i].getId(), categorizations[i].getDocumentId(), 
-								categorizations[i].getCategoryId(), categorizations[i].getProbability());
+								categorizations[i].getCategoryId(), categorizations[i].getProbability(), categorizations[i].getExplanation());
 		}
 		TCCategorizations output = new TCCategorizations(TCcategorizations);
 		
@@ -78,7 +78,7 @@ public class CategorizationsResource {
 		TCCategorization[] TCcategorizations = new TCCategorization[categorizations.length];
 		for(int i=0; i<categorizations.length; i++){
 			TCcategorizations[i] = new TCCategorization(categorizations[i].getId(), categorizations[i].getDocumentId(), 
-								categorizations[i].getCategoryId(), categorizations[i].getProbability());
+								categorizations[i].getCategoryId(), categorizations[i].getProbability(), categorizations[i].getExplanation());
 		}
 		TCCategorizations output = new TCCategorizations(TCcategorizations);
 		

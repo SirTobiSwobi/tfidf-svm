@@ -14,9 +14,9 @@ public class CategorizationManagerTest {
 		CategorizationManager cznMan = new CategorizationManager();
 		
 		
-		Categorization czn = new Categorization(0,0,0,.8);
+		Categorization czn = new Categorization(0,0,0,.8,"");
 		cznMan.setCategorization(czn);
-		czn = new Categorization(1,3,2,.2);
+		czn = new Categorization(1,3,2,.2,"");
 		cznMan.setCategorization(czn);
 		Categorization result = cznMan.getCategorizationByAddress(0);
 		assertTrue("Categorization(0) has docId=0 ("+result.getDocumentId()+")and catId=0 ("+result.getCategoryId()+") and probability=0.8("+

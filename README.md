@@ -18,3 +18,4 @@ Version change log:
 - 1.0.0: finished /classification endpoint and fixed /model endpoint
 - 1.0.1: fixed configuration GUI
 - 1.0.2: fixed bug in /configurations/x
+- 1.1.0: Implementing explainability as extension for every categorization.

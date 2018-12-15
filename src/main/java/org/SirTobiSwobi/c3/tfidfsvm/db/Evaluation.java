@@ -53,7 +53,7 @@ public class Evaluation {
 		if(evalAssignments!=null){
 			for(int i=0; i<evalAssignments.length; i++){
 				Categorization czn = new Categorization(evalAssignments[i].getId(), evalAssignments[i].getDocumentId(), 
-						evalAssignments[i].getCategoryId(), evalAssignments[i].getProbability());
+						evalAssignments[i].getCategoryId(), evalAssignments[i].getProbability(), evalAssignments[i].getExplanation());
 				cznMan.setCategorization(czn);
 			}
 		}

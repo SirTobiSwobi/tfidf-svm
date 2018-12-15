@@ -38,7 +38,7 @@ public class CategorizationManager {
 		return returnValue;
 	}
 	
-	private Categorization getCategorizationWithDocAndCat(long docId, long catId){
+	public Categorization getCategorizationWithDocAndCat(long docId, long catId){
 		Categorization czn=null;
 		Categorization[] allCategorizations = this.getCategorizationArray();
 		for(int i=0; i<allCategorizations.length;i++){
@@ -97,9 +97,9 @@ public class CategorizationManager {
 		}
 	}
 	
-	public synchronized void addCategorizationWithoutId(long docId, long catId, double probability){
+	public synchronized void addCategorizationWithoutId(long docId, long catId, double probability, String explanation){
 		long id = assignments.getMaxId()+1;
-		Categorization czn = new Categorization(id, docId, catId, probability);
+		Categorization czn = new Categorization(id, docId, catId, probability, explanation);
 		this.setCategorization(czn);
 	}
 	

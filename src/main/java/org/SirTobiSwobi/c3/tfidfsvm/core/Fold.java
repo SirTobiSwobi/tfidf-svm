@@ -98,10 +98,10 @@ public class Fold extends Thread {
 			 * Fixed assignment to develop and debug evaluation.
 			 */
 			if(evaluationIds[i]%2==0){
-				evalCznMan.addCategorizationWithoutId(evaluationIds[i], 2, 0.8);
+				evalCznMan.addCategorizationWithoutId(evaluationIds[i], 2, 0.8, "");
 				appendString+="Assigned document "+evaluationIds[i]+" to category 2 with probability 0.8. ";
 			}else{
-				evalCznMan.addCategorizationWithoutId(evaluationIds[i], 4, 0.7);
+				evalCznMan.addCategorizationWithoutId(evaluationIds[i], 4, 0.7, "");
 				appendString+="Assigned document "+evaluationIds[i]+" to category 4 with probability 0.7. ";
 			}
 			//model.appendToTrainingLog(appendString);
@@ -119,7 +119,7 @@ public class Fold extends Thread {
 							appendString = appendString +("Implcit: "+implicitCategorizations[k]+" ");
 							if(implicitCategorizations[k]!=czns[j].getCategoryId()){
 								appendString = appendString +("Implicit addition: Document: "+evaluationIds[i]+" Category: "+implicitCategorizations[k]+" Probability: "+czns[j].getProbability());
-								evalCznMan.addCategorizationWithoutId(evaluationIds[i], implicitCategorizations[k], czns[j].getProbability());
+								evalCznMan.addCategorizationWithoutId(evaluationIds[i], implicitCategorizations[k], czns[j].getProbability(), "");
 							}
 						}
 					}

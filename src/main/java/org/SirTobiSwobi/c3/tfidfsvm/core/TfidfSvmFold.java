@@ -181,7 +181,7 @@ public class TfidfSvmFold extends Fold {
 				svm_node[] vector = LibSvmWrapper.buildSvmNodes(features);
 				double prediction = svm.svm_predict(svmModel, vector);
 				appendString+=" Prediction for document "+evaluationIds[i]+": "+(long)prediction+" <br />";
-				evalCznMan.addCategorizationWithoutId(evaluationIds[i], (long)prediction, 1.0);
+				evalCznMan.addCategorizationWithoutId(evaluationIds[i], (long)prediction, 1.0, "");
 			//	model.appendToTrainingLog(appendString);
 				model.incrementCompletedSteps();
 				
@@ -197,7 +197,7 @@ public class TfidfSvmFold extends Fold {
 								appendString = appendString +("Implcit: "+implicitCategorizations[k]+" <br />");
 								if(implicitCategorizations[k]!=czns[j].getCategoryId()){
 									appendString = appendString +"Implicit addition: Document: "+evaluationIds[i]+" Category: "+implicitCategorizations[k]+" Probability: "+czns[j].getProbability()+"<br />";
-									evalCznMan.addCategorizationWithoutId(evaluationIds[i], implicitCategorizations[k], czns[j].getProbability());
+									evalCznMan.addCategorizationWithoutId(evaluationIds[i], implicitCategorizations[k], czns[j].getProbability(), "");
 								}
 							}
 						}
