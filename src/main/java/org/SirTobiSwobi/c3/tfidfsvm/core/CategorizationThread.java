@@ -32,6 +32,7 @@ public class CategorizationThread extends Thread {
 	private void performCategorization(){
 		TfidfFeatureExtractor fe=new TfidfFeatureExtractor(refHub);
 		double[] features = fe.getDimensionNormalizedVector(document.getId());
+		double[] probabilities = new double[refHub.getActiveModel().getSvmModel().label.length];
 		String explanation="This document is considered to belong to category ";
 		
 		String featureString="Doc: "+document.getId();
@@ -45,7 +46,11 @@ public class CategorizationThread extends Thread {
 		}
 		//System.out.println(featureString);	//used for debugging within the log
 		svm_node[] vector = LibSvmWrapper.buildSvmNodes(features);
-		double prediction = svm.svm_predict(refHub.getActiveModel().getSvmModel(), vector);
+		//double prediction = svm.svm_predict(refHub.getActiveModel().getSvmModel(), vector);
+		double prediction = svm.svm_predict_probability(refHub.getActiveModel().getSvmModel(), vector, probabilities);
+		for (int i=0; i<probabilities.length;i++){
+			System.out.println("probabilities["+i+"]="+probabilities[i]);
+		}
 		//System.out.println("Prediction: "+prediction);
 		explanation += "\""+refHub.getCategoryManager().getByAddress((long)prediction).getLabel()+"\", "; 
 		if(vector.length==1){
@@ -66,7 +71,7 @@ public class CategorizationThread extends Thread {
 		}
 		
 		explanation += "during training with a dataset containing "+refHub.getActiveModel().getTrainingSetSize()+" documents.";
-		refHub.getCategorizationManager().addCategorizationWithoutId(document.getId(), (long)prediction, 1.0, explanation);
+		refHub.getCategorizationManager().addCategorizationWithoutId(document.getId(), (long)prediction, probabilities[Utilities.indexOf(refHub.getActiveModel().getSvmModel().label, (int)prediction)], explanation);
 		if(refHub.getActiveModel().getConfiguration().isIncludeImplicits()){
 			long[] implicitCategorizations=refHub.getTargetFunctionManager().findAllImplicitCatIds((long)prediction, SearchDirection.Ascending);
 			if(implicitCategorizations!=null){
@@ -75,7 +80,7 @@ public class CategorizationThread extends Thread {
 						if(!refHub.getCategorizationManager().containsCategorizationOf(document.getId(), implicitCategorizations[l])){
 							explanation = "The document is considered to belong to category \""+refHub.getCategoryManager().getByAddress(implicitCategorizations[l]).getLabel()+"\", ";
 							explanation +=" because the category relationships imply that it belongs to this category.";
-							refHub.getCategorizationManager().addCategorizationWithoutId(document.getId(), implicitCategorizations[l], 1.0, explanation);
+							refHub.getCategorizationManager().addCategorizationWithoutId(document.getId(), implicitCategorizations[l], probabilities[Utilities.indexOf(refHub.getActiveModel().getSvmModel().label, (int)prediction)], explanation);
 						}else{
 							Categorization czn = refHub.getCategorizationManager().getCategorizationWithDocAndCat(document.getId(), implicitCategorizations[l]);
 							czn.setExplanation(czn.getExplanation()+" Additionally, the category relationships imply that it belongs to this category. ");

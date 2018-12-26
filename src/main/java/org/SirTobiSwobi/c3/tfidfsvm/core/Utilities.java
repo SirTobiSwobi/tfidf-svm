@@ -142,6 +142,26 @@ public class Utilities {
 		return index;
 	}
 	
+	public static int indexOf(double[] array, double element){
+		int index = -1;
+		for(int i=0;i<array.length;i++){
+			if(array[i]==element){
+				index=i;
+			}
+		}
+		return index;
+	}
+	
+	public static int indexOf(int[] array, int element){
+		int index = -1;
+		for(int i=0;i<array.length;i++){
+			if(array[i]==element){
+				index=i;
+			}
+		}
+		return index;
+	}
+	
 	/**
 	 * Computes all nodes reachable from a start node in a graph. 
 	 * Nodes are addressed by longs.

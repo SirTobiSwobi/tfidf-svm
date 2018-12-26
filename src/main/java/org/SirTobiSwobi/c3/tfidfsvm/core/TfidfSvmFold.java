@@ -179,9 +179,11 @@ public class TfidfSvmFold extends Fold {
 				//features = Utilities.normalizeVector(features);	
 				double[] features = fe.getDimensionNormalizedVector(evaluationIds[i]);
 				svm_node[] vector = LibSvmWrapper.buildSvmNodes(features);
-				double prediction = svm.svm_predict(svmModel, vector);
+				//double prediction = svm.svm_predict(svmModel, vector); 
+				double[] probabilities = new double[svmModel.label.length];
+				double prediction = svm.svm_predict_probability(svmModel, vector, probabilities);
 				appendString+=" Prediction for document "+evaluationIds[i]+": "+(long)prediction+" <br />";
-				evalCznMan.addCategorizationWithoutId(evaluationIds[i], (long)prediction, 1.0, "");
+				evalCznMan.addCategorizationWithoutId(evaluationIds[i], (long)prediction, probabilities[Utilities.indexOf(svmModel.label, (int)prediction)], "");
 			//	model.appendToTrainingLog(appendString);
 				model.incrementCompletedSteps();
 				
