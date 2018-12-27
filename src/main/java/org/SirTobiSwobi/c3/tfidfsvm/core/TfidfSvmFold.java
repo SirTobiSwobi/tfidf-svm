@@ -55,6 +55,7 @@ public class TfidfSvmFold extends Fold {
 		param.probability = 0;
 		*/
 		svm_parameter param = config.getSvmParameter();
+		param.probability = 1;
 		param.gamma = 1.0/(double)model.getControlledVocabulary().length;
 		//param.nr_weight = 0;
 		/*
@@ -182,9 +183,20 @@ public class TfidfSvmFold extends Fold {
 				//double prediction = svm.svm_predict(svmModel, vector); 
 				double[] probabilities = new double[svmModel.label.length];
 				double prediction = svm.svm_predict_probability(svmModel, vector, probabilities);
-				appendString+=" Prediction for document "+evaluationIds[i]+": "+(long)prediction+" <br />";
-				evalCznMan.addCategorizationWithoutId(evaluationIds[i], (long)prediction, probabilities[Utilities.indexOf(svmModel.label, (int)prediction)], "");
-			//	model.appendToTrainingLog(appendString);
+				for(int l=0;l<probabilities.length; l++){
+					//System.out.println("Fold "+foldId+ " doc "+evaluationIds[i]+" cat "+(long)svmModel.label[l]+" prob "+probabilities[l]);
+					if(probabilities[l]>=config.getAssignmentThreshold()){
+						appendString+=" Prediction for document "+evaluationIds[i]+": "+(long)svmModel.label[l]+" <br />";
+						evalCznMan.addCategorizationWithoutId(evaluationIds[i], 
+								(long)svmModel.label[l],
+								probabilities[l], "");
+					//	model.appendToTrainingLog(appendString);
+					}
+					
+				}
+				
+				
+				
 				model.incrementCompletedSteps();
 				
 				if(includeImplicits){

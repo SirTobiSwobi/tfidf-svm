@@ -33,7 +33,7 @@ public class CategorizationThread extends Thread {
 		TfidfFeatureExtractor fe=new TfidfFeatureExtractor(refHub);
 		double[] features = fe.getDimensionNormalizedVector(document.getId());
 		double[] probabilities = new double[refHub.getActiveModel().getSvmModel().label.length];
-		String explanation="This document is considered to belong to category ";
+		
 		
 		String featureString="Doc: "+document.getId();
 		for(int i=0;i<features.length;i++){
@@ -49,45 +49,57 @@ public class CategorizationThread extends Thread {
 		//double prediction = svm.svm_predict(refHub.getActiveModel().getSvmModel(), vector);
 		double prediction = svm.svm_predict_probability(refHub.getActiveModel().getSvmModel(), vector, probabilities);
 		for (int i=0; i<probabilities.length;i++){
-			System.out.println("probabilities["+i+"]="+probabilities[i]);
+			//System.out.println("probabilities["+i+"]="+probabilities[i]);
+			if(probabilities[i]>=refHub.getActiveModel().getConfiguration().getAssignmentThreshold()){
+				String explanation="This document is considered to belong to category ";
+				explanation += "\""+refHub.getCategoryManager().getByAddress((long)refHub.getActiveModel().getSvmModel().label[i]).getLabel()+"\", "; 
+				if(vector.length==1){
+					explanation += " because none of the trained indicators are present in the document. Lack of indicator terms have been associated with this category ";
+				}else{
+					explanation+="because it contains multiple occurences of the terms ";
+					for(int j=0;j<vector.length-1; j++){
+						explanation+=refHub.getActiveModel().getControlledVocabulary()[vector[j].index].getTerm();
+						if(j<vector.length-2){
+							explanation+=", ";
+						}else if(j==vector.length-1){
+							explanation+=", and ";
+						}else{
+							explanation+=". ";
+						}
+					}
+					explanation += " These terms have been identified as indicators for this category ";
+				}
+				
+				explanation += "during training with a dataset containing "+refHub.getActiveModel().getTrainingSetSize()+" documents.";
+				refHub.getCategorizationManager().addCategorizationWithoutId(document.getId(),
+						(long)refHub.getActiveModel().getSvmModel().label[i], 
+						probabilities[Utilities.indexOf(refHub.getActiveModel().getSvmModel().label, 
+						refHub.getActiveModel().getSvmModel().label[i])], 
+						explanation);
+				if(refHub.getActiveModel().getConfiguration().isIncludeImplicits()){
+					long[] implicitCategorizations=refHub.getTargetFunctionManager().findAllImplicitCatIds((long)refHub.getActiveModel().getSvmModel().label[i], 
+							SearchDirection.Ascending);
+					if(implicitCategorizations!=null){
+						for(int l=0; l<implicitCategorizations.length; l++){
+							if(implicitCategorizations[l]!=(long)refHub.getActiveModel().getSvmModel().label[i]){
+								if(!refHub.getCategorizationManager().containsCategorizationOf(document.getId(), implicitCategorizations[l])){
+									explanation = "The document is considered to belong to category \""+refHub.getCategoryManager().getByAddress(implicitCategorizations[l]).getLabel()+"\", ";
+									explanation +=" because the category relationships imply that it belongs to this category.";
+									refHub.getCategorizationManager().addCategorizationWithoutId(document.getId(), 
+											implicitCategorizations[l], 
+											probabilities[Utilities.indexOf(refHub.getActiveModel().getSvmModel().label, (int)refHub.getActiveModel().getSvmModel().label[i])], 
+											explanation);
+								}else{
+									Categorization czn = refHub.getCategorizationManager().getCategorizationWithDocAndCat(document.getId(), implicitCategorizations[l]);
+									czn.setExplanation(czn.getExplanation()+" Additionally, the category relationships imply that it belongs to this category. ");
+								}
+							}				
+						}
+					}
+			}
 		}
 		//System.out.println("Prediction: "+prediction);
-		explanation += "\""+refHub.getCategoryManager().getByAddress((long)prediction).getLabel()+"\", "; 
-		if(vector.length==1){
-			explanation += " because none of the trained indicators are present in the document. Lack of indicator terms have been associated with this category ";
-		}else{
-			explanation+="because it contains multiple occurences of the terms ";
-			for(int i=0;i<vector.length-1; i++){
-				explanation+=refHub.getActiveModel().getControlledVocabulary()[vector[i].index].getTerm();
-				if(i<vector.length-2){
-					explanation+=", ";
-				}else if(i==vector.length-1){
-					explanation+=", and ";
-				}else{
-					explanation+=". ";
-				}
-			}
-			explanation += " These terms have been identified as indicators for this category ";
-		}
 		
-		explanation += "during training with a dataset containing "+refHub.getActiveModel().getTrainingSetSize()+" documents.";
-		refHub.getCategorizationManager().addCategorizationWithoutId(document.getId(), (long)prediction, probabilities[Utilities.indexOf(refHub.getActiveModel().getSvmModel().label, (int)prediction)], explanation);
-		if(refHub.getActiveModel().getConfiguration().isIncludeImplicits()){
-			long[] implicitCategorizations=refHub.getTargetFunctionManager().findAllImplicitCatIds((long)prediction, SearchDirection.Ascending);
-			if(implicitCategorizations!=null){
-				for(int l=0; l<implicitCategorizations.length; l++){
-					if(implicitCategorizations[l]!=(long)prediction){
-						if(!refHub.getCategorizationManager().containsCategorizationOf(document.getId(), implicitCategorizations[l])){
-							explanation = "The document is considered to belong to category \""+refHub.getCategoryManager().getByAddress(implicitCategorizations[l]).getLabel()+"\", ";
-							explanation +=" because the category relationships imply that it belongs to this category.";
-							refHub.getCategorizationManager().addCategorizationWithoutId(document.getId(), implicitCategorizations[l], probabilities[Utilities.indexOf(refHub.getActiveModel().getSvmModel().label, (int)prediction)], explanation);
-						}else{
-							Categorization czn = refHub.getCategorizationManager().getCategorizationWithDocAndCat(document.getId(), implicitCategorizations[l]);
-							czn.setExplanation(czn.getExplanation()+" Additionally, the category relationships imply that it belongs to this category. ");
-						}
-					}				
-				}
-			}
 		}
 		
 		
