@@ -20,3 +20,4 @@ Version change log:
 - 1.0.2: fixed bug in /configurations/x
 - 1.1.0: Implementing explainability as extension for every categorization.
 - 1.1.1: Implemented missed functionality of probability estimation. 
+- 1.1.2: Fixed Java Script API Library Issue. 
