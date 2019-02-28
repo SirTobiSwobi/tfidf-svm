@@ -10,7 +10,7 @@ function getIdObject(){
 	
 	var pageURL = window.location.search.substring(1);
 	var urlVariables = pageURL.split('&');
-	var assId, docId, catId, relId, confId, modId;
+	var assId, docId, catId, relId, confId, modId, weId;
 	for(var i=0; i< urlVariables.length; i++){
 		var paramName = urlVariables[i].split('=');
 		if(paramName[0] == "assId"){
@@ -25,10 +25,12 @@ function getIdObject(){
 			confId = paramName[1];
 		}else if(paramName[0] == "modId"){
 			modId = paramName[1];
+		}else if(paramName[0] == "weId"){
+			weId = paramName[1];
 		}
 	}
 	
-	var output = {assId: assId, docId: docId, catId: catId, relId: relId, confId: confId, modId: modId};
+	var output = {assId: assId, docId: docId, catId: catId, relId: relId, confId: confId, modId: modId, weId: weId};
 	return output;
 	
 }
