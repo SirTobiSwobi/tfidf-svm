@@ -59,6 +59,13 @@ archetype: Classifier Trainer
 runType:  trainer
 debugExamples: false
 featureExtractionThreads: 8
+server:
+  applicationConnectors:
+  - type: http
+    port: 8080	#Here you can specify the service port of this TFIDF-SVM instance. One can communicate with it through this port.
+  adminConnectors:
+  - type: http 
+    port: 8081 #Here you can specify the admin port of the TFIDF-SVM instance
 #Jersey client settings
 jerseyClient:
   #The maximum idle time for a connection

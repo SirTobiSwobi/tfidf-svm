@@ -61,16 +61,16 @@
 -->
 <html>
 	<head>
-		<title>/relationship</title>
+		<title>MIT License</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
 		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
 	</head>
-<body class="is-preload">
-<!-- Wrapper -->
+	<body class="is-preload">
+		<!-- Wrapper -->
 		<div id="wrapper">
-		<!-- Header -->
+			<!-- Header -->
 					<header id="header" class="alt">
 						<a href="index.html" class="logo"><strong>TFIDF SVM Classifier</strong> <span>by Tobias Eljasik-Swoboda</span></a>
 						<nav>
@@ -103,41 +103,67 @@
 							<section id="one">
 								<div class="inner">
 									<header class="major">
-										<h1 id="firstHeadline">Manage category relationship /relationships/</h1>
+										<h1 id="firstHeadline">See or set active model /model</h1>
 									</header>
-			<ul class="actions">						
-				<li><button id="read">Read</button></li>
-				<li><button id="create">Create or update</button></li>
-				<li><button id="delete">Delete</button></li>
-				<li><a href="relationships.html" class="button next">Back to /relationships</a></li>
-			</ul>
+									<div id="list">
+										<h2>MIT License</h2>
+										<p> 
+	Copyright (c) 2020 Tobias Eljasik-Swoboda</br>
+
+	Permission is hereby granted, free of charge, to any person obtaining a copy
+	of this software and associated documentation files (the "Software"), to deal
+	in the Software without restriction, including without limitation the rights
+	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+	copies of the Software, and to permit persons to whom the Software is
+	furnished to do so, subject to the following conditions:</br>
+
+	The above copyright notice and this permission notice shall be included in all
+	copies or substantial portions of the Software.</br>
+
+	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+	SOFTWARE.</br>
 	
-	<div id="list">
-		<h2>Available relationship:</h2>
-	</div>
-	<div id="createForm">
-		<h2>Create or update a relationship</h2>
-			<form action="/" id="createF">
-				<table>
-					<tr><td>Id:</td><td><input type="text" name="id" id="id" placeholder="-1 if you don't know"></td></tr>
-					<tr><td>From:</td><td><select name="fromId" id="fromId"></select></td></tr>
-					<tr><td>To:</td><td><select name="toId" id="toId"></select></td></tr>
-					<tr><td>Type:</td><td><select name="type" id="relType">
-						<option value="Sub">Sub</option>
-						<option value="Equality">Equality</option>
-					</select></td></tr>
-					<tr><td></td><td><input type="submit" value="Upload Relationship"></form>
-				</table>
-	</div>
-	<div id="deleteConfirm">
-		<h2>Delete this relationship</h2>
-		<p>Note: To delete the relationship, type delete into the field and press the delete button.</p>
-		<form action="/" id="deleteF">
-			<input type="text" name="delete" placeholder="delete"><br>
-			<input type="submit" value="Delete category">
-		</form>	
-	</div>
-	</section>
+	This Software is using LibSVM which is under the following License:</br>
+	
+	Copyright (c) 2000-2019 Chih-Chung Chang and Chih-Jen Lin
+	All rights reserved.</br>
+
+	Redistribution and use in source and binary forms, with or without
+	modification, are permitted provided that the following conditions
+	are met:</br>
+
+	1. Redistributions of source code must retain the above copyright
+	notice, this list of conditions and the following disclaimer. </br>
+
+	2. Redistributions in binary form must reproduce the above copyright
+	notice, this list of conditions and the following disclaimer in the
+	documentation and/or other materials provided with the distribution.</br>
+
+	3. Neither name of copyright holders nor the names of its contributors
+	may be used to endorse or promote products derived from this software
+	without specific prior written permission.</br>
+
+
+	THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+	``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+	LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+	A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR
+	CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+	EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+	PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+	PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+	LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+	NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+	SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+										</p>					
+									</div>
+									
+							</section>
 
 					</div>
 			<!-- Footer -->
@@ -151,15 +177,17 @@
 							</ul>
 						</div>
 					</footer>
-	</div>
-		<script src="assets/js/jquery.min.js"></script>
-		<script src="assets/js/jquery.scrolly.min.js"></script>
-		<script src="assets/js/jquery.scrollex.min.js"></script>
-		<script src="assets/js/browser.min.js"></script>
-		<script src="assets/js/breakpoints.min.js"></script>
-		<script src="assets/js/util.js"></script>
-		<script src="assets/js/c3.ct.trainer-api.js"></script>
-		<script src="assets/js/c3.ct.tfidf-svm.js"></script>
-		<script src="assets/js/c3.ct.relationship.js"></script>
+			
+		</div>
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/c3.ct.trainer-api.js"></script>
+			<script src="assets/js/c3.ct.tfidf-svm.js"></script>
+			<script src="assets/js/c3.ct.license.js"></script>
+	
 	</body>
 </html>
