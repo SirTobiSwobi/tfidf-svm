@@ -54,7 +54,11 @@ public class CategorizationThread extends Thread {
 				String explanation="This document is considered to belong to category ";
 				explanation += "\""+refHub.getCategoryManager().getByAddress((long)refHub.getActiveModel().getSvmModel().label[i]).getLabel()+"\", "; 
 				if(vector.length==1){
-					explanation += " because none of the trained indicators are present in the document. Lack of indicator terms have been associated with this category ";
+					explanation += "because it contained no indicators to belong to another category. ";
+					explanation += "In "+refHub.getActiveModel().getTrainingSetSize()+" previously analyzed documents, the lack of these indicators ";
+					explanation += "represented a "+probabilities[i]+" probability for a document to belong to category ";
+					explanation += refHub.getCategoryManager().getByAddress((long)refHub.getActiveModel().getSvmModel().label[i]).getLabel()+". ";
+					explanation += "The likelihood has to be at least "+refHub.getActiveModel().getConfiguration().getAssignmentThreshold()+" to be assigned to this category.";
 				}else{
 					explanation+="because it contains multiple occurences of the terms ";
 					for(int j=0;j<vector.length-1; j++){
@@ -67,10 +71,12 @@ public class CategorizationThread extends Thread {
 							explanation+=". ";
 						}
 					}
-					explanation += " These terms have been identified as indicators for this category ";
+					explanation += "In "+refHub.getActiveModel().getTrainingSetSize()+" previously analyzed documents, the occurence of these terms in their relative amounts ";
+					explanation += "indicated a "+probabilities[i]+" probability for a document to belong to category ";
+					explanation += refHub.getCategoryManager().getByAddress((long)refHub.getActiveModel().getSvmModel().label[i]).getLabel()+". ";
+					explanation += "The likelihood has to be at least "+refHub.getActiveModel().getConfiguration().getAssignmentThreshold()+" to be assigned to this category.";
 				}
 				
-				explanation += "during training with a dataset containing "+refHub.getActiveModel().getTrainingSetSize()+" documents.";
 				refHub.getCategorizationManager().addCategorizationWithoutId(document.getId(),
 						(long)refHub.getActiveModel().getSvmModel().label[i], 
 						probabilities[Utilities.indexOf(refHub.getActiveModel().getSvmModel().label, 
